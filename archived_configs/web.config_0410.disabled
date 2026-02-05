@@ -1,0 +1,288 @@
+<?xml version="1.0"?>
+<!-- 
+    Note: As an alternative to hand editing this file you can use the 
+    web admin tool to configure settings for your application. Use
+    the Website->Asp.Net Configuration option in Visual Studio.
+    A full list of settings and comments can be found in 
+    machine.config.comments usually located in 
+    \Windows\Microsoft.Net\Framework\v2.x\Config 
+-->
+<configuration>
+  <connectionStrings>
+    <!-- <add name="salespipeline" connectionString="Data Source=chaarer-laptop;Initial Catalog=salespipeline;Integrated Security=True"
+      providerName="System.Data.SqlClient" /> -->
+         <add name="salespipeline" connectionString="Data Source=52.24.53.29;Initial Catalog=cts_salespipeline;User ID=ctssql;Password=L3tm31n!" providerName="System.Data.SqlClient" />
+    <!-- <add name="salespipeline" connectionString="Data Source=209.17.116.5;Initial Catalog=salespipeline;User ID=essqldata;Password=L3tm31n!" providerName="System.Data.SqlClient" /> -->
+    <!-- add name="salespipeline" connectionString="Data Source=localhost;User ID=essqldata;Password=L3tm31n!" providerName="System.Data.SqlClient"/> -->
+  </connectionStrings>
+  <appSettings/>
+  <runtime>
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+      <dependentAssembly>
+        <assemblyIdentity name="AjaxMin" publicKeyToken="21ef50ce11b5d80f" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-5.7.5124.21494" newVersion="5.2.5021.15808" />
+      </dependentAssembly>
+    </assemblyBinding>
+  </runtime>
+  <system.web>
+    <!-- 
+            Set compilation debug="true" to insert debugging 
+            symbols into the compiled page. Because this 
+            affects performance, set this value to true only 
+            during development.
+        -->
+    <compilation debug="true" targetFramework="4.0"/>
+    <!-- Authentication disabled: removed Forms auth -->
+    <authentication mode="None" />
+
+    <machineKey decryption="AES" validation="SHA1" decryptionKey="1513F567EE75F7FB5AC0AC4D79E1D9F25430E3E2F1BCDD3370BCFC4EFC97A541" validationKey="32CBA563F26041EE5B5FE9581076C40618DCC1218F5F447634EDE8624508A129" />
+    <!-- membership configuration removed -->
+    <!-- roleManager configuration removed -->
+    <!--
+            The <customErrors> section enables configuration 
+            of what to do if/when an unhandled error occurs 
+            during the execution of a request. Specifically, 
+            it enables developers to configure html error pages 
+            to be displayed in place of a error stack trace. -->
+    <customErrors mode="Off" defaultRedirect="GenericErrorPage.aspx">
+      <error statusCode="403" redirect="NoAccess.htm" />
+      <error statusCode="404" redirect="FileNotFound.htm" />
+    </customErrors>
+    <pages controlRenderingCompatibilityVersion="3.5" clientIDMode="AutoID">
+      <controls>
+        <add tagPrefix="ajaxToolkit" assembly="AjaxControlToolkit" namespace="AjaxControlToolkit" />
+      </controls>
+    </pages>
+  </system.web>
+  <!-- Update the <smtp> settings -->
+  <system.net>
+    <mailSettings>
+      <smtp deliveryMethod="Network" from="info@ashersolutions.com">
+        <!-- <network host="smtp.eternalsolutionsllc.com" userName="info@eternalsolutionsllc.com" password="L3tm31n!" port="2525"/> -->
+        <network host="localhost" />
+      </smtp>
+    </mailSettings>
+    </system.net>
+    <!--
+            The <customErrors> section enables configuration 
+            of what to do if/when an unhandled error occurs 
+            during the execution of a request. Specifically, 
+            it enables developers to configure html error pages 
+            to be displayed in place of a error stack trace.
+                    
+
+        <customErrors mode="RemoteOnly" defaultRedirect="GenericErrorPage.aspx">
+            <error statusCode="403" redirect="NoAccess.htm" />
+            <error statusCode="404" redirect="FileNotFound.htm" />
+        </customErrors>
+    -->
+  <!-- Update the <smtp> settings 
+  <system.net>
+    <mailSettings>
+      <smtp deliveryMethod="Network" from="youraddress@example.com">
+        <network host="smtp.example.com" userName="username" password="password" port="25"/>
+      </smtp>
+    </mailSettings> 
+  </system.net> -->
+  <!-- Only allow administrators users to view the admin pages -->
+  <!-- <location path="~/Account/ManageUsers.aspx">
+    <system.web>
+      <authorization>
+        <deny users="Administrators"/>
+      </authorization>
+    </system.web>
+  </location>
+  <location path="~/Account/UserInformation.aspx">
+    <system.web>
+      <authorization>
+        <deny users="Administrators"/>
+      </authorization>
+    </system.web>
+  </location>
+  <location path="~/Membership/ManageRoles.aspx">
+    <system.web>
+      <authorization>
+        <deny users="Administrators"/>
+      </authorization>
+    </system.web>
+  </location>
+  <location path="~/Roles/UsersAndRoles.aspx">
+    <system.web>
+      <authorization>
+        <deny users="Administrators"/>
+      </authorization>
+    </system.web>
+  </location>
+  <!-- Only allow authenticated users to view ChangePassword.aspx -->
+  <location path="~/account/ChangePassword.aspx">
+    <system.web>
+      <authorization>
+        <deny users="?"/>
+      </authorization>
+    </system.web>
+  </location>
+  <!-- Only allow authenticated users to view the customer edit pages -->
+  <location path="~/admin/secure.aspx">
+    <system.web>
+      <authorization>
+        <allow roles="Administrators, Supervisors, Agent, Call Agent" />
+        <deny users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+  <location path="customer.aspx">
+    <system.web>
+      <authorization>
+        <allow roles="Administrators, Supervisors, Agent, Call Agent" />
+        <deny users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+  <location path="custlookupagnt.aspx">
+    <system.web>
+      <authorization>
+        <allow roles="Administrators, Supervisors, Agent, Call Agent" />
+        <deny users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+  <location path="custlookuphp.aspx">
+    <system.web>
+      <authorization>
+        <allow roles="Administrators, Supervisors, Agent, Call Agent" />
+        <deny users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+  <location path="custlookupln.aspx">
+    <system.web>
+      <authorization>
+        <allow roles="Administrators, Supervisors, Agent, Call Agent" />
+        <deny users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+    <location path="cluAgentActive.aspx">
+    <system.web>
+      <authorization>
+        <allow roles="Administrators, Supervisors, Agent, Call Agent" />
+        <deny users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+    <location path="cluAgentCB.aspx">
+    <system.web>
+      <authorization>
+        <allow roles="Administrators, Supervisors, Agent, Call Agent" />
+        <deny users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+    <location path="cluAgentDead.aspx">
+    <system.web>
+      <authorization>
+        <allow roles="Administrators, Supervisors, Agent, Call Agent" />
+        <deny users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+    <location path="cluAgentLM.aspx">
+    <system.web>
+      <authorization>
+        <allow roles="Administrators, Supervisors, Agent, Call Agent" />
+        <deny users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+    <location path="cluAgentLMTickler.aspx">
+    <system.web>
+      <authorization>
+        <allow roles="Administrators, Supervisors, Agent, Call Agent" />
+        <deny users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+    <location path="cluAgentCBTickler.aspx">
+    <system.web>
+      <authorization>
+        <allow roles="Administrators, Supervisors, Agent, Call Agent" />
+        <deny users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+    <location path="cluAgentnew.aspx">
+    <system.web>
+      <authorization>
+        <allow roles="Administrators, Supervisors, Agent, Call Agent" />
+        <deny users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+    <location path="cluAgentSold.aspx">
+    <system.web>
+      <authorization>
+        <allow roles="Administrators, Supervisors, Agent, Call Agent" />
+        <deny users="*"/>
+      </authorization>
+    </system.web>
+    </location>
+    <location path="cluAgentSM.aspx">
+    <system.web>
+      <authorization>
+        <allow roles="Administrators, Supervisors, Agent, Call Agent" />
+        <deny users="*"/>
+      </authorization>
+    </system.web>
+    </location>
+     <location path="cluLastResort.aspx">
+    <system.web>
+      <authorization>
+        <allow roles="Administrators, Supervisors, Agent, Call Agent" />
+        <deny users="*"/>
+      </authorization>
+    </system.web>
+    </location>   <location path="inputsoldlead.aspx">
+      <system.web>
+        <authorization>
+          <allow roles="Administrators, Supervisors, Agent, Call Agent" />
+          <deny users="*"/>
+        </authorization>
+      </system.web>
+    </location>
+   <location path="dcards.aspx">
+    <system.web>
+      <authorization>
+        <allow roles="Administrators, Supervisors" />
+        <deny users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+   <location path="minfo.aspx">
+    <system.web>
+      <authorization>
+        <allow roles="Administrators, Supervisors" />
+        <deny users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+   <location path="funhomes.aspx">
+    <system.web>
+      <authorization>
+        <allow roles="Administrators, Supervisors" />
+        <allow users="sstangler"/>
+        <deny users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+  <location path="inputfh.aspx">
+    <system.web>
+      <authorization>
+        <allow roles="Administrators, Supervisors" />
+        <allow users="sstangler"/>
+        <deny users="*"/>
+      </authorization>
+    </system.web>
+  </location>
+<!-- Only allow authenticated users to view Customer.aspx -->
+
+</configuration>

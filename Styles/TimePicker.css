@@ -1,0 +1,27 @@
+﻿body   
+{
+}
+
+.divMainContainer
+{
+	width:400px;
+	height:300px;
+	border:1px solid lightblue;	
+	padding-top:20px;
+	text-align:center;
+}
+
+.divSameLine
+{
+	
+	float:left;
+	width:48%;
+	margin:2px;
+	font-size:11;
+
+}
+.divClearFloat
+{
+	clear:both;
+	visibility:hidden;
+}

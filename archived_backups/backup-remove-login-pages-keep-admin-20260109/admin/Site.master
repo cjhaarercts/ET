@@ -1,0 +1,79 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Site.master.cs" Inherits="Site" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head id="Head1" runat="server">
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta http-equiv="X-UA-Compatible" content="IE=7"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <!-- #BeginEditable "doctitle" -->
+    <title>Partner Lead Management System©</title>
+    <!-- #EndEditable -->
+    <link href="../../styles/style2.css" media="screen" rel="stylesheet" title="CSS" type="text/css" />
+    <link href="../../styles/style4.css" media="screen" rel="stylesheet" type="text/css" />
+    <link id="Link1" runat="server" rel="shortcut icon" href="~/favicon.ico" type="image/x-icon"/>
+    <link id="Link2" runat="server" rel="icon" href="~/favicon.ico" type="image/ico"/>
+</head>
+<body>
+    <!-- Begin Container -->
+    <div id="container" style="left: 0px; top: 0px; height: 272px;">
+	    <!-- Begin Masthead -->
+	    <div id="masthead">
+                <asp:contentplaceholder id="HeaderContent" runat="server"/>
+		    <p style="height: 139px; font: xx-large serif"><b>The
+		    Veteran
+		    Program</b></p><br/>
+		    <p><em>"Together Meeting Your Needs"</em></p>
+	    </div>
+	    <!-- End Masthead -->
+	    <!-- Begin Navigation -->
+	    <div id="navigationmast">
+		    <ul>
+			    <li><a href= '<%=ResolveClientUrl("index.aspx") %>'>Customer Home</a></li>
+			    <li><a href= '<%=ResolveClientUrl("about/about.aspx") %>'>About Us</a></li>
+				<!-- Partner Logon removed: authentication disabled -->
+                <li><a href= '<%=ResolveClientUrl("admin/secure.aspx") %>'>Partner Pages</a></li>
+			</ul>
+	    </div>
+    </div>
+	    <!-- End Navigation -->
+	<!-- Begin Page Content -->
+    <div id="wrapper">
+
+        <form id="form1" runat="server">
+             <div id="Div1">
+                <asp:contentplaceholder id="MainContent" runat="server">
+                  <!-- Page-specific content will go here... -->
+                <div id="header">
+                <h2>Partner Lead Management System©</h2><br />
+                
+                <span class="breadcrumb">
+                    <asp:SiteMapPath ID="SiteMapPath1" runat="server">
+                    </asp:SiteMapPath>
+                </span>
+                </div>
+                </asp:contentplaceholder>
+            </div>       
+
+        
+            <div id="content">
+                <asp:ContentPlaceHolder ID="LoginContent1" runat="server">
+                    <!-- LoginView and LoginStatus removed — authentication disabled -->
+                    <br />
+                </asp:ContentPlaceHolder>
+                <asp:ContentPlaceHolder ID="LoginContent2" runat="server">
+                    <!-- LoginView and LoginStatus removed -->
+                    <br /><br />
+                </asp:ContentPlaceHolder>
+            </div>
+            
+            <div id="navigation">
+                
+                <asp:SiteMapDataSource ID="SiteMapDataSource1" runat="server" ShowStartingNode="false" />
+            </div>
+        </form>
+    </div>
+</body>
+</html>

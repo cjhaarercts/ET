@@ -1,0 +1,461 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="master.master.cs" Inherits="account_master" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+  <title>Welcome to CAMInsures.com</title>
+    <meta name="Description" content="CAMInsures offers whole life insurance, annuities, retirement plans, disability income insurance and long term care insurance for individuals and businesses."/>
+    <meta name="Keywords" content="whole life insurance, annuities, annuity, disability income insurance, long term care insurance, retirement plans, pension plans, universal life insurance, variable life insurance, permanent life insurance"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=7"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=8"/>
+    <meta name="google-site-verification" content="NmcKL8ULC81koEy9AsAv-17dz9sFoReImHVN0pg5ugs" />
+    <meta name="msvalidate.01" content="4EC8CBF8BBDD63391587764107209DE4" />
+    <link href="styles/StyleSheet.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="../css/reset.css" type="text/css" media="all"/>
+  <link rel="stylesheet" href="../css/layout.css" type="text/css" media="all"/>
+  <link rel="stylesheet" href="../css/styleaspx.css" type="text/css" media="all"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+  <link rel="stylesheet" href="../css/zerogridaspx.css"/>
+  <link rel="stylesheet" href="../css/responsive.css"/>  <script type="text/javascript" src="js/jquery.js" ></script>
+  <script type="text/javascript" src="../js/jquery-1.5.2.js" ></script>
+  <script type="text/javascript" src="../js/cufon-yui.js"></script>
+  <script type="text/javascript" src="../js/cufon-replace.js"></script>  
+  <script type="text/javascript" src="../js/Amaranth_400.font.js"></script>
+  <script type="text/javascript" src="../js/script.js"></script>  
+  <script type="text/javascript" src="../js/scroll.js"></script>
+  <script type="text/javascript" src="../js/atooltip.jquery.js"></script>
+  <script type="text/javascript" src="../js/css3-mediaqueries.js"></script>
+  <script type="text/javascript" src="../js/marquee.js"></script>
+    <asp:ContentPlaceHolder id="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <div>
+        <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
+       </asp:ContentPlaceHolder>
+<div class="header"> 
+<div class="extra">
+	<div id="page_1"> 
+		<div class="main zerogrid">
+			<!--header -->
+			<header>
+				<a href="../carlosestronza.html" id="logo">CAM Insures Quick. Smart. Effective</a>
+                <style>
+                    iframe { margin-left: 360px; }
+                    .auto-style1
+                    {
+                        text-align: justify;
+                    }
+                    .auto-style2
+                    {
+                        color: #FF0000;
+                    }
+                    #left
+                    {
+                        margin-left: 10px;
+                    }
+                </style>
+                <iframe width="468" height="237" src="//www.youtube.com/embed/nfmycpZRsyA?autoplay=0&rel=0&showinfo=0&controls=0&frameborder=0"></iframe>
+                <nav>
+					<ul id="menu">
+						<li class="nav1"><a href="#page_2">About</a></li>
+						<li class="nav2"><a href="#page_3">Products</a></li>
+						<li class="nav3"><a href="../indexesp.html">Español</a></li>
+						<li class="nav4"><a href="#page_5">Agents</a></li>
+						<li class="nav5"><a href="#page_6">Contacts</a></li>
+						<li class="nav6"><a href="#page_7">Health</a></li>
+					</ul>
+				</nav>
+			</header>
+			<!--header end-->
+		</div>
+		<div class="block"></div>
+	</div>
+</div>
+	<div class="main zerogrid">
+			<!--footer -->
+			<footer>
+				<ul class="icons">
+					<li><a href="https://www.facebook.com/pages/CAMInsures/198970886793628?ref=ts&fref=ts" class="normaltip" title="Facebook"><img src="../images/icon1.jpg" alt=""/></a></li>
+					<li><a href="https://twitter.com/CAMInsures" class="normaltip" title="Twitter"><img src="../images/icon4.jpg" alt=""/></a></li>
+					<li><a href="https://www.youtube.com/channel/UCVtcSJPghVtvnmARQHvJXSQ" class="normaltip" title="YouTube"><img src="../images/youtube.jpg" alt=""/></a></li>
+				</ul>
+			</footer>
+			<!--footer end-->
+	</div>
+</div>
+<div class="extra">
+	<div id="page_2">
+		<div class="main zerogrid">
+			<!--header -->
+			<header>
+				<h1><a href="#page_2">About</a></h1>
+				<nav>
+					<ul class="menu">
+						<li><a href="#page_1">Home</a></li>
+						<li><a href="#page_3">Products</a></li>
+						<li><a href="../indexesp.html">Español</a></li>
+						<li><a href="#page_5">Agents</a></li>
+						<li><a href="#page_6">Contacts</a></li>
+						<li><a href="#page_7">Health Care</a></li>
+					</ul>
+				</nav>
+			</header>
+			<!--header end-->
+			<!--content -->
+			<section class="content">
+				<article class="col-3-4">
+					<div class="wrap-col">
+					<h2>&quot;Because Integrity Is More Than Just A Word&quot;</h2>
+					<div class="wrapper pad_bot1">
+                        <table style="float:left; margin-right: 5px; background-image:url('../images/page-1-img1.jpg');width:452px;height:242px"><tr><td></td></tr></table>
+						<!-- <figure class="left marg_right1"><img src="images/Page-1-Img1.jpg" alt="" width="300" height="160"></figure> -->
+       					<p><strong class="color1">About CAMInsures</strong>
+                        <p style="text-align:justify">CAMInsures is dedicated to protecting lifestyles and assets of individuals, as well as corporations. Our consultative approach equips our clients with knowledge needed to make an informed decision. CAM’s Network of companies offers a full range of insurance programs to satisfy most needs. Our dedicated professionals have offered exceptional service and expert advice to individuals, families, and businesses for over 20 years.  We offer an unbiased, risk free, no obligation Balance Analysis to identify where you may be over insured and eliminate gaps in coverage.</p>
+                        <p><strong class="color1">Our Commitment</strong>
+                        <p style="text-align:justify">To assist our clients achieve an insurance equilibrium; obtaining the necessary coverage for their specific needs at a reasonable rate because protecting your family and/or employees can be a balancing act.</p>
+                        <p><strong class="color1">Our Philosophy</strong>
+                        <p class="auto-style1">Find the need and fill it while touching lives in a positive way. We strive for excellence and integrity of products via honorable competitive companies that offer relevant policies for today’s market; providing the perfect balance of coverage and cost.</p>
+                        <p><strong class="color1">Our Experience</strong>
+                        <p style="text-align:justify">CAMInsures was founded in 1990 and incorporated in 1999. Focusing in the South Florida Life and Health Insurance market; catering to business owners and individuals/families. CAM’s expansion evolved into several insurance lines, being licensed in 5 states and a network of licensed professionals having over 100 years combined experience in the insurance industry.</p>
+
+					</div>
+					</div>
+        		</article>
+				<article class="col-1-4">
+					<div class="wrap-col">
+
+                        <a href="http://caminsures.us/additional-products/"><img src="../images/4ezquotefinal75.png"/></a>
+                        <p><strong class="color1">Our Mission</strong></p>
+
+                        <!-- <figure class="left marg_right1"><img src="images/page-1-img3.jpg" alt="" width="225" height="120"></figure> -->
+                            <span style="text-align:justify">We aim to provide customer satisfaction through balanced protection to build and maintain a strong, caring, durable relationship. </span>
+
+					<p><strong class="color1"><a href="../page-2-meetus.html">Meet the Team</a></strong></p>
+                         <table style="background-image:url('../images/page-1-img3.jpg');width:288px;height:106px"><tr><td></td></tr></table>
+                       <p><strong class="color1">Why CAMInsures</strong></p>
+
+                        <!-- <figure class="left marg_right1"><img src="images/thunder_hd_widescreen_wallpapers_2560x1600-cropped-w-verse.jpg" alt="" width="225" height="120"></figure> -->
+                        <!-- <p><strong>Protecting you from the storms of life.</strong></p> -->
+                        <p style="text-align:justify">
+                            <span>CAM wants to protect you from the storms of life; we put your needs first.&nbsp; Unfortunately, it rains on everyone and it is up to each person to protect themselves against these unexpected storms. &nbsp;It is important to protect what we have so we can continue to be a blessing to our loved ones, in-spite of the storms that come.<o:p></o:p></span></p>
+					</div>
+        		</article>
+			</section>
+			<!--content end-->
+		</div>
+		<div class="block"></div>
+	</div>
+</div>
+	<div class="main zerogrid">
+			<!--footer -->
+			<footer>
+				<ul class="icons">
+					<li><a href="https://www.facebook.com/pages/CAMInsures/198970886793628?ref=ts&fref=ts" class="normaltip" title="Facebook"><img src="../images/icon1.jpg" alt=""/></a></li>
+					<li><a href="https://twitter.com/CAMInsures" class="normaltip" title="Twitter"><img src="../images/icon4.jpg" alt=""/></a></li>
+					<li><a href="https://www.youtube.com/channel/UCVtcSJPghVtvnmARQHvJXSQ" class="normaltip" title="YouTube"><img src="../images/youtube.jpg" alt=""/></a></li>
+				</ul>
+			</footer>
+			<!--footer end-->
+	</div>
+<div class="extra">
+	<div id="page_3">
+		<div class="main zerogrid">
+			<!--header -->
+			<header>
+				<h1><a href="#page_3">Products</a></h1>
+				<nav>
+					<ul class="menu">
+						<li><a href="#page_1">Home</a></li>
+						<li><a href="#page_2">About</a></li>
+						<li><a href="../indexesp.html">Español</a></li>
+						<li><a href="#page_5">Agents</a></li>
+						<li><a href="#page_6">Contacts</a></li>
+						<li><a href="#page_7">Health Care</a></li>
+					</ul>
+                    <br />
+				</nav>
+			</header>
+			<!--header end-->
+			<!--content -->
+			<section class="content">
+                    <article class="col-1-6">
+					<div class="wrap-col">
+						<figure class="left marg_right1"><a href="../page-3-supplemental.html"><img src="../images/hospital85x90.gif" alt="Hospital"/></a></figure>
+                    </div>
+                    </article>
+                    <article class="col-2-6">
+					<div class="wrap-col">
+						<p class="pad_bot1"><strong class="color1">Supplemental Insurance</strong></p>
+						<p style="text-align:justify">These programs are more important in an accident or illness in today’s market than ever before, due to the Affordable Care Act.  They fill the gaps that major medical leaves behind, with cash to help with out of pocket expenses.</p>
+					</div>
+                    </article>
+                    <article class="col-1-6">
+					<div class="wrap-col">
+						<figure class="left marg_right1"><a href="../page-3-life.html"><img src="../images/heart112x90.gif" alt="Heart"/></a></figure>
+                    </div>
+                    </article>
+                    <article class="col-2-6">
+					<div class="wrap-col">
+						<p class="pad_bot1"style=" margin-left:10px"><strong class="color1">Life Insurance</strong></p>
+						<p style="text-align:justify">Today’s life plans protect you from financial hardship in cases of chronic, critical and terminal illnesses; as well as provide a death benefit for your loved ones.  If your life insurance policy cannot help you while you are alive it is out dated.</p>
+                    </div>
+                    </article>
+                </section>
+                <section class="content">            
+                    <article class="col-1-6">
+					<div class="wrap-col">
+						<figure class="left marg_right1"><a href="../page-3-di.html"><img src="../images/crutches68x90.gif" alt="Crutches"/></a></figure>
+					</div>
+                    </article>
+                    <article class="col-2-6">
+					<div class="wrap-col">
+                        <p class="pad_bot1"><strong class="color1">Disability</strong></p>
+						<p style="text-align:justify">In today’s economy, bankruptcies are at an all-time high, and most of us can’t go weeks without a paycheck.  Disability insurance helps provide a portion of income while you recover from an accident or illness that prevents you from working.</p>
+                    </div>
+                    </article>
+                    <article class="col-1-6">
+					<div class="wrap-col">
+						<figure class="left marg_right1"><a href="../page-3-pc.html"><img src="../images/house102x90.gif" alt="House"/></a></figure>
+                    </div>
+                    </article>
+                    <article class="col-2-6">
+					<div class="wrap-col">
+						<p class="pad_bot1"style=" margin-left:10px"><strong class="color1">Property and Casualty</strong></p>
+						<p style="text-align:justify">In America, liability risks are everywhere; just own or rent a home, have a business, employees, a boat, or any space that can be shared with others.  Keep the financial risk on the insurance providers’ side, not on your own.</p>
+                    </div>
+                    </article>
+                </section>
+                <section class="content">
+                    <article class="col-1-6">
+					<div class="wrap-col">
+						<figure class="left marg_right1"><a href="../page-3-finalexpense.html"><img src="../images/fe74x90.gif" alt="Angel"/></a></figure>
+                    </div>
+            		</article>
+                    <article class="col-2-6">
+					<div class="wrap-col">
+						<p class="pad_bot1"><strong class="color1">Final Expense</strong></p>
+						<p style="text-align:justify">The moment a loved one passes away is a very vulnerable and stressful time; a time of loss and confusion, but it doesn’t have to be that way.  Prepare now for the only thing we are guaranteed in life.</p>
+                     </div>         
+                    </article>
+                    <article class="col-1-6">
+					<div class="wrap-col">
+                        <figure class="left marg_right1"><a href="https://adobeformscentral.com/?f=LG5Da6pX9jg9Yel%2ANPn7bA"><img src="../images/ba500x300.gif" width="160" height="160" alt=""/></a></figure>
+                    </div>
+                    </article>
+                    <article class="col-2-6">
+					<div class="wrap-col">
+						<p class="pad_bot1" style="margin-left:10px"><strong class="color1">Balanced Analysis</strong></p>
+						<p style="text-align:justify"><span>Balanced protection is key; too much insurance is a financial waste and not enough can leave you bankrupt.  Get your no cost, no obligation analysis and vacation voucher here!</span></p>
+                    </div>
+                    </article>
+                </section>
+                    <div id="m1" class="marquee"></div>
+			<!--content end-->
+		</div>
+		<div class="block"></div>
+	</div>
+</div>
+	<div class="main zerogrid">
+			<!--footer -->
+			<footer>
+				<ul class="icons">
+					<li><a href="https://www.facebook.com/pages/CAMInsures/198970886793628?ref=ts&fref=ts" class="normaltip" title="Facebook"><img src="../images/icon1.jpg" alt=""/></a></li>
+					<li><a href="https://twitter.com/CAMInsures" class="normaltip" title="Twitter"><img src="../images/icon4.jpg" alt=""/></a></li>
+					<li><a href="https://www.youtube.com/channel/UCVtcSJPghVtvnmARQHvJXSQ" class="normaltip" title="YouTube"><img src="../images/youtube.jpg" alt=""/></a></li>
+				</ul>
+			</footer>
+			<!--footer end-->
+	</div>
+<div class="extra">
+	<div id="page_5">
+		<div class="main zerogrid">
+			<!--header -->
+			<header>
+				<h1><a href="#page_5">Agents</a></h1>
+				<nav>
+					<ul class="menu">
+						<li><a href="#page_1">Home</a></li>
+						<li><a href="#page_2">About</a></li>
+						<li><a href="#page_3">Products</a></li>
+						<li><a href="../indexesp.html">Español</a></li>
+						<li><a href="#page_6">Contacts</a></li>
+						<li><a href="#page_7">Health Care</a></li>
+					</ul>
+				</nav>
+                <br />
+			</header>
+			<!--header end-->
+			<!--content -->
+			<section class="content">
+				<article class="col-3-4">
+					<div class="wrap-col">
+                    To start your insurance career with CAMInsures, email us today at: <span class="auto-style2">careers@caminsures.com</span>
+					<div class="wrapper pad_bot1">
+					</div>
+                <!--<form id="LoginForm" method="post">
+					<div>
+						<div class="wrapper"><input class="input" type="text" value="Agent ID;"  onblur="if(this.value=='') this.value='Name:'" onFocus="if(this.value =='Name:' ) this.value=''" ></div>
+						<div class="wrapper"><input class="input" type="text" value="Password:"  onblur="if(this.value=='') this.value='Email:'" onFocus="if(this.value =='Email:' ) this.value=''" ></div>
+						<a href="javascript:" class="button" onClick="document.getElementById('ContactForm').submit()" style="color: #000000; background-color: #0ca0ce">Agent Login</a>
+					</div>
+                </form> -->
+                    </div>
+                </article>
+				<article class="col-1-4">
+					<div class="wrapper pad_bot1">
+						<figure class="left marg_right1">
+                            <img src="../images/busiteam400x500.gif" width="160" height="160" alt="Walking Team"/></figure>
+					</div>
+        		</article>
+            </section>
+                <div id="m2" class="marquee"></div>
+			<!--content end-->
+		</div>
+		<div class="block"></div>
+	</div>
+</div>
+	<div class="main zerogrid">
+			<!--footer -->
+			<footer>
+				<ul class="icons">
+					<li><a href="https://www.facebook.com/pages/CAMInsures/198970886793628?ref=ts&fref=ts" class="normaltip" title="Facebook"><img src="../images/icon1.jpg" alt=""/></a></li>
+					<li><a href="https://twitter.com/CAMInsures" class="normaltip" title="Twitter"><img src="../images/icon4.jpg" alt=""/></a></li>
+					<li><a href="https://www.youtube.com/channel/UCVtcSJPghVtvnmARQHvJXSQ" class="normaltip" title="YouTube"><img src="../images/youtube.jpg" alt=""/></a></li>
+				</ul>
+			</footer>
+			<!--footer end-->
+	</div>
+<div class="extra">
+	<div id="page_6">
+		<div class="main zerogrid">
+			<!--header -->
+			<header>
+				<h1><a href="#page_6">Contacts</a></h1>
+				<nav>
+					<ul class="menu">
+						<li><a href="#page_1">Home</a></li>
+						<li><a href="#page_2">About</a></li>
+						<li><a href="#page_3">Products</a></li>
+						<li><a href="../indexesp.html">Español</a></li>
+						<li><a href="#page_5">Agents</a></li>
+						<li><a href="#page_7">Health Care</a></li>
+					</ul>
+                    <br />
+                    <!-- <div id="m4" class="marquee"></div> -->
+				</nav>
+			</header>
+			<!--header end-->
+			<!--content -->
+			<section class="content">
+				<article class="col-1-4">
+					<!-- <h2><span>Connect With Us</span></h2> -->
+					<!-- <p>CAMInsures</p> -->
+					<figure class="left marg_right1"><img src="../images/camlogo.png" width="180" height="180" alt=""/></figure>
+					<br />
+					<br />
+					<br />
+                    <p>4650 SW 51st Street, Suite 705 Davie FL. 33314</p>
+					<p> <span class="right">1(844)CAM-WISE</span><strong class="color1">Toll Free:</strong><br>
+					    <span class="right">(226-9473)</span><strong class="color1"></strong><br>
+					    <span class="right">(954) 368-7818</span><strong class="color1">Phone:</strong><br>
+						<span class="right">(954)368-7819</span><strong class="color1">FAX:</strong><br>
+						<span class="right"><a href="mailto:" class="auto-style2">youmatter@caminsures.com</a></span><strong class="color1">E-mail:</strong></p>
+                    <a href="https://www.facebook.com/pages/CAMInsures/198970886793628?ref=ts&fref=ts" class="normaltip" title="Facebook"><img src="../images/icon1.jpg" width="30" height="30" alt=""/></a>
+					<a href="https://twitter.com/CAMInsures" class="normaltip" title="Twitter"><img src="../images/icon4.jpg" width="30" height="30" alt=""/></a>
+					<a href="https://www.youtube.com/channel/UCVtcSJPghVtvnmARQHvJXSQ" class="normaltip" title="YouTube"><img src="../images/youtube.jpg" width="30" height="30" alt=""/></a>
+        		</article>
+				<article class="col-2-4">
+                    <!-- <h2 style="text-align:center">Please click play</h2> -->
+                    <iframe id="left" style="margin-left:5px" width="550" height="315" src="//www.youtube.com/embed/E49CkmPsMDw?autoplay=0&rel=0&showinfo=0&controls=0&frameborder=0"></iframe>
+                </article>
+				<article class="col-1-4">
+					<!-- <h2>Contact Form</h2> -->
+					<!-- <form id="ContactForm" method="post">
+							<div>
+								<div class="wrapper"><span class="right"><input class="input" type="text" value="Name:"  onblur="if(this.value=='') this.value='Name:'" onFocus="if(this.value =='Name:' ) this.value=''" ></span></div>
+								<div class="wrapper"><span class="right"><input class="input" type="text" value="Email:"  onblur="if(this.value=='') this.value='Email:'" onFocus="if(this.value =='Email:' ) this.value=''" ></span></div>
+								<div class="wrapper"><span class="right"><input class="input" type="text" value="Phone:"  onblur="if(this.value=='') this.value='Phone:'" onFocus="if(this.value =='Phone:' ) this.value=''"></span></div>
+								<div class="textarea_box"><span class="right"><textarea cols="1" rows="1" onBlur="if(this.value=='') this.value='Message:'" onFocus="if(this.value =='Message:' ) this.value=''"  >Message:</textarea></span></div>
+								<span class="right"><a href="javascript:" class="button" onClick="document.getElementById('ContactForm').reset()"></span>Clear</a>
+								<span class="right"><a href="javascript:" class="button" onClick="document.getElementById('ContactForm').submit()"></span>Send</a>
+							</div>
+					</form> -->
+        		</article>
+			</section>
+			<!--content end-->
+		</div>
+		<div class="block2"></div>
+    </div>
+    </div>
+	<div class="main zerogrid">
+			<!--footer -->
+			<footer>
+				<ul class="icons">
+					<li><a href="https://www.facebook.com/pages/CAMInsures/198970886793628?ref=ts&fref=ts" class="normaltip" title="Facebook"></a></li>
+					<li><a href="https://twitter.com/CAMInsures" class="normaltip" title="Twitter"></a></li>
+					<li><a href="https://www.youtube.com/channel/UCVtcSJPghVtvnmARQHvJXSQ" class="normaltip" title="YouTube"></a></li>
+				</ul>
+			</footer>
+			<!--footer end-->
+	</div>
+<div class="extra">
+	<div id="page_7">
+		<div class="main zerogrid">
+			<!--header -->
+			<header>
+				<h1><a href="page_7">Health Care</a></h1>
+				<nav>
+					<ul class="menu">
+						<li><a href="#page_1">Home</a></li>
+						<li><a href="#page_2">About</a></li>
+						<li><a href="#page_3">Products</a></li>
+						<li><a href="../indexesp.html">Español</a></li>
+						<li><a href="#page_5">Agents</a></li>
+						<li><a href="#page_6">Contacts</a></li>
+					</ul>
+                    <br />
+                    <!-- <div id="m2" class="marquee"></div> -->
+				</nav>
+			</header>
+			<!--header end-->
+			<!--content -->
+			<section class="content">
+				<article class="col-1-6">
+					<div class="wrap-col">
+						<figure class="left marg_right1"><img src="../images/doctor72x90.gif" alt="Doctor"/></figure>
+                    </div>
+                </article>
+                <article class="col-5-6">
+					<h2>Prepaid Health Care (PHC)</h2>
+					<div class="wrap-col">
+					<p>With our PHC plan, you will enjoy, Doctor's visits of only $10 per visit, unlimited visits to your Primary Care Physician (PCP) within PHC's network, Urgent Care Centers near your home or work place. All pre-existing conditions are accepted, there are no limits on age or weight. There is no need for a social security number and there is no commitment to contracts for any period of time. Click here for more information. ProMedical Plan offers upon these benefits others that complement the Plan as a Discount Medical Plan Organization. For information Please click <a href="http://4ezquote.com/4ezquote.com/Pre_Paid_Health.html">here.</a>
+</p>
+                    </div>
+        		</article>
+			</section>
+			<!--content end-->
+		</div>
+		<div class="block2"></div>
+	</div>
+</div>
+	<div class="main zerogrid">
+			<!--footer -->
+			<footer class="footer_end">
+				<div class="wrapper">
+					<ul class="icons">
+					<li><a href="https://www.facebook.com/pages/CAMInsures/198970886793628?ref=ts&fref=ts" class="normaltip" title="Facebook"><img src="../images/icon1.jpg" alt=""/></a></li>
+					<li><a href="https://twitter.com/CAMInsures" class="normaltip" title="Twitter"><img src="../images/icon4.jpg" alt=""/></a></li>
+					<li><a href="https://www.youtube.com/channel/UCVtcSJPghVtvnmARQHvJXSQ" class="normaltip" title="YouTube"><img src="../images/youtube.jpg" alt=""/></a></li>
+					</ul>
+				</div>
+			</footer>
+			<!--footer end-->
+	</div>
+<script type="text/javascript"> Cufon.now(); </script>
+    </div>
+    </form>
+</body>
+</html>

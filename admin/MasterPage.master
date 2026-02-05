@@ -1,0 +1,121 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="masterpage.master.cs" Inherits="MasterPage" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+
+    <link href="styles/StyleSheet.css" rel="stylesheet" type="text/css" />
+  <title>Welcome to CAMInsures.com</title>
+    <meta name="Description" content="CAMInsures offers whole life insurance, annuities, retirement plans, disability income insurance and long term care insurance for individuals and businesses."/>
+    <meta name="Keywords" content="whole life insurance, annuities, annuity, disability income insurance, long term care insurance, retirement plans, pension plans, universal life insurance, variable life insurance, permanent life insurance"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=7"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=8"/>
+    <meta name="google-site-verification" content="NmcKL8ULC81koEy9AsAv-17dz9sFoReImHVN0pg5ugs" />
+    <meta name="msvalidate.01" content="4EC8CBF8BBDD63391587764107209DE4" />
+    <link href="styles/StyleSheet.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="../css/reset.css" type="text/css" media="all"/>
+  <link rel="stylesheet" href="../css/layout.css" type="text/css" media="all"/>
+  <link rel="stylesheet" href="../css/styleaspx.css" type="text/css" media="all"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+  <link rel="stylesheet" href="../css/zerogridaspx.css"/>
+  <link rel="stylesheet" href="../css/responsive.css"/>  <script type="text/javascript" src="js/jquery.js" ></script>
+  <script type="text/javascript" src="../js/jquery-1.5.2.js" ></script>
+  <script type="text/javascript" src="../js/cufon-yui.js"></script>
+  <script type="text/javascript" src="../js/cufon-replace.js"></script>  
+  <script type="text/javascript" src="../js/Amaranth_400.font.js"></script>
+  <script type="text/javascript" src="../js/script.js"></script>  
+  <script type="text/javascript" src="../js/scroll.js"></script> 
+  <script type="text/javascript" src="../js/atooltip.jquery.js"></script>
+  <script type="text/javascript" src="../js/css3-mediaqueries.js"></script>
+  <script type="text/javascript" src="../js/marquee.js"></script>
+
+    <asp:ContentPlaceHolder id="HeaderContentPlaceHolder" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+            <!-- LoginView removed as authentication is disabled -->
+            <div id="login">Welcome</div>
+    <form id="form1" runat="server">
+<div class="header"> 
+    <div id="page_4">
+        <div class="main zerogrid">
+			<!--header -->
+				<a id="logo">CAM Insures Quick. Smart. Effective</a>
+				<h5><a href="#page_1">Home</a></h5>
+				<nav>
+					<ul class="menu">
+						<li><a href="#page_2">About</a></li>
+						<li><a href="#page_3">Products</a></li>
+						<li><a href="../indexesp.html">Español</a></li>
+						<li><a href="#page_5">Agents</a></li>
+						<li><a href="#page_6">Contacts</a></li>
+						<li><a href="#page_7">Health Care</a></li>
+						<li><asp:HyperLink href="users.aspx" id="UserAdmin" runat="server">Users</asp:HyperLink></li>
+				</ul>
+				</nav>
+			<!--header end-->
+        </div>
+    </div>
+</div>
+<table summary="" cellspacing="0" cellpadding="0">
+<tr>
+    <td width="25%" valign="top">
+<div class="extra">
+        <div class="left">
+            <div id="login">
+
+            &nbsp;&nbsp;[&nbsp;<asp:LoginStatus ID="MasterLoginStatus" runat="server" LogoutAction="Redirect" LogoutPageUrl="~/account/logout.aspx" />&nbsp;]&nbsp;&nbsp;
+        </div>
+        </div>
+        </div>
+    </td>
+    <td colspan="1">
+        <div id="clock">
+            <script type="text/javascript">
+            <!--   // Array of month Names
+    var monthNames = new Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+    var now = new Date();
+    thisYear = now.getYear();
+    if (thisYear < 1900) { thisYear += 1900 }; // corrections if Y2K display problem
+    document.write(monthNames[now.getMonth()] + " " + now.getDate() + ", " + thisYear);
+    // -->
+            </script>
+         </div>
+    </td>
+</tr>
+<tr>
+
+    <td width="50%" valign="top">
+        <asp:ContentPlaceHolder id="MainContentPlaceHolder" runat="server">     
+          <!-- PlaceHolder for MAIN Content Area on derived page. -->   
+        </asp:ContentPlaceHolder>
+    </td>
+    <td width="25%" valign="top">
+        <div class="right">
+
+            <div class="footer">&raquo;</div>
+        </div>        <div class="right">
+            <asp:Label ID="ba" runat="server"><h3><a href="#" class="arrow">&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;Balanced Analysis&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;</a></h3>
+            <p>
+<script type="text/javascript" src="https://formscentral.acrobat.com/Clients/Current/FormsCentral/htmlClient/scripts/adobe.form.embed.min.js"></script>
+<script type="text/javascript">; ADOBEFORMS.EmbedForm({ formId: "T-zY1aR8OEeaK7Z0*J5euA" });</script>
+            </p>
+            </asp:Label>
+            <div class="footer">&raquo;</div>
+        </div>
+        <div class="right">
+            <h3><a href="#" class="arrow">&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;News&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;</a></h3>
+            <p>
+            This is just a place holder for some real text. If you would like to have some real text here, 
+            just view the source, enter your text and then save the file as an HTML file. You should then
+            be able to see your text here instead of someone elses place holder filler text.
+            </p>
+            <div class="footer">&raquo;</div>
+        </div>
+    
+    </td>      
+</tr>   
+</table>  
+</form>
+</body>
+</html>
+

@@ -1,0 +1,31 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Admin.master.cs" Inherits="Admin_access_Admin" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta charset="utf-8" />
+    <title>Admin Panel</title>
+    <link href="../styles/admin.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="container">
+        <header id="masthead">
+            <h1>Admin Panel</h1>
+        </header>
+        <nav id="navigation">
+            <ul>
+                <li><a href='<%=ResolveClientUrl("~/admin/dashboard.aspx") %>'>Dashboard</a></li>
+                <li><a href='<%=ResolveClientUrl("~/admin/users.aspx") %>'>Users</a></li>
+                <li><a href='<%=ResolveClientUrl("~/admin/settings.aspx") %>'>Settings</a></li>
+                <li><a href='<%=ResolveClientUrl("~/admin/reports.aspx") %>'>Reports</a></li>
+                <li><a href='<%=ResolveClientUrl("~/admin/logout.aspx") %>'>Logout</a></li>
+            </ul>
+        </nav>
+        <main id="content">
+            <asp:ContentPlaceHolder id="MainContent" runat="server"></asp:ContentPlaceHolder>
+        </main>
+    </div>
+</body>
+</html>
+
+

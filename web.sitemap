@@ -1,0 +1,19 @@
+﻿<siteMap>
+  <siteMapNode title="Home" description="Home" url="~/default.aspx">
+    <siteMapNode url="~/About.aspx" title="About Us" description="About Us">
+      <siteMapNode url="~/Contactus.aspx" title="Contact Us" description="Contact Us"/>
+      <siteMapNode url="~/tvp/index.aspx" title="The Veteran Program" description="The Veteran Program"/>
+    </siteMapNode>
+
+    <siteMapNode title="Clergy" description="Clergy Services" url="~/clergy-services.aspx">
+      <siteMapNode url="~/clergy1.aspx" title="Clergy Services - Richard Stangler" description="Richard Stanlger"/>
+      <siteMapNode url="~/clergy2.aspx" title="Clergy Services - Michael Lawhorn" description="Michael Lawhorn"/>
+    </siteMapNode>
+
+    <siteMapNode title="Funerals" url="~/funerals.aspx" description="Funeral Services">
+      <siteMapNode url="~/financial-concerns.aspx" title="Financial Concerns" description="Financial Concerns"/>
+      <siteMapNode url="~/funeral-planning-guide.aspx" title="Funeral Planning Guide" description="Funeral Planning Guide"/>
+      <siteMapNode url="~/funeral-prepayment-options.aspx" title="Funeral Prepayment Options" description="Funeral Prepayment Options"/>
+    </siteMapNode>
+  </siteMapNode>
+</siteMap>

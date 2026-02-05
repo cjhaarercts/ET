@@ -1,0 +1,58 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Site.master.cs" Inherits="Site" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta charset="utf-8" />
+    <title>Partner Lead Management</title>
+    <link href="styles/style2.css" media="screen" rel="stylesheet" />
+    <link href="styles/style4.css" media="screen" rel="stylesheet" />
+    <link id="Link1" runat="server" rel="shortcut icon" href="~/favicon.ico" />
+    <link id="Link2" runat="server" rel="icon" href="~/favicon.ico" />
+    <meta name="description" content="Partner Lead Management for funeral homes" />
+</head>
+<body>
+    <div id="container">
+        <header id="masthead">
+            <h1>The Veteran Program</h1>
+            <p><em>"Together Making A Difference"</em></p>
+        </header>
+        <nav id="navigationmast">
+            <ul>
+                <li><a href='<%=ResolveClientUrl("http://theveteranprogram.com/index.aspx") %>'>Customer Home</a></li>
+                <!-- Partner Logon removed -->
+                <li><a href='<%=ResolveClientUrl("default.aspx") %>'>Partner Pages</a></li>
+                <li><a href='<%=ResolveClientUrl("adminpages.aspx") %>'>Admin Pages</a></li>
+            </ul>
+            <h2>Partner Lead Management</h2>
+        </nav>
+        <main id="wrapper">
+            <form id="form1" runat="server">
+                <div id="Div1">
+                    <asp:ContentPlaceHolder id="MainContent" runat="server">
+                        <div id="header">
+                            <br />
+                            <span class="breadcrumb">
+                                <asp:SiteMapPath ID="SiteMapPath1" runat="server" />
+                            </span>
+                        </div>
+                    </asp:ContentPlaceHolder>
+                </div>
+                <div id="content">
+                    <asp:ContentPlaceHolder ID="LoginContent1" runat="server">
+                        <!-- LoginView removed — authentication disabled -->
+                        <br />
+                    </asp:ContentPlaceHolder>
+                    <asp:ContentPlaceHolder ID="LoginContent2" runat="server">
+                        <!-- LoginStatus removed — authentication disabled -->
+                        <br /><br />
+                    </asp:ContentPlaceHolder>
+                </div>
+                <nav id="navigation">
+                    <asp:SiteMapDataSource ID="SiteMapDataSource1" runat="server" ShowStartingNode="false" />
+                </nav>
+            </form>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,93 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPage" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<script language="JavaScript" type="text/javascript">
+<!--
+    function FP_swapImg() {//v1.0
+        var doc = document, args = arguments, elm, n; doc.$imgSwaps = new Array(); for (n = 2; n < args.length;
+ n += 2) {
+            elm = FP_getObjectByID(args[n]); if (elm) {
+                doc.$imgSwaps[doc.$imgSwaps.length] = elm;
+                elm.$src = elm.src; elm.src = args[n + 1];
+            }
+        }
+    }
+
+    function FP_preloadImgs() {//v1.0
+        var d = document, a = arguments; if (!d.FP_imgs) d.FP_imgs = new Array();
+        for (var i = 0; i < a.length; i++) { d.FP_imgs[i] = new Image; d.FP_imgs[i].src = a[i]; }
+    }
+
+    function FP_getObjectByID(id, o) {//v1.0
+        var c, el, els, f, m, n; if (!o) o = document; if (o.getElementById) el = o.getElementById(id);
+        else if (o.layers) c = o.layers; else if (o.all) el = o.all[id]; if (el) return el;
+        if (o.id == id || o.name == id) return o; if (o.childNodes) c = o.childNodes; if (c)
+            for (n = 0; n < c.length; n++) { el = FP_getObjectByID(id, c[n]); if (el) return el; }
+        f = o.forms; if (f) for (n = 0; n < f.length; n++) {
+            els = f[n].elements;
+            for (m = 0; m < els.length; m++) { el = FP_getObjectByID(id, els[n]); if (el) return el; }
+        }
+        return null;
+    }
+// -->
+</script>
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head id="Head1" runat="server">
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+    <meta name="Author" content="Eternal Solutions Online"/>
+    <meta name="GENERATOR" content="Mozilla/4.79 [en] (Windows NT 5.0; U) [Netscape]"/>
+    <meta name="keywords" content="pre need funeral, Pre-need funeral, pre need funeral insurance, pre need funeral planning, pre-need funeral arrangements, preneed funeral, Funeral services, funeral arrangements, funeral programs, funeral costs, funeral ceremony, cost of a funeral, Funeral information, Funeral Guide, funeral article, modern funeral, funeral procedures, funeral process, Veteran funeral, Veterans funerals, Veterans funeral, Veterans burial benefits, Veteran Cemetary, Veterans Cemetary" />
+    <meta name="description" content="Preneed funeral plans outline wishes for funeral services and interment. To avoid inflationary costs, prepaid funeral plans are available." />
+    <!-- #BeginEditable "doctitle" -->
+    <title>The Veteran Program</title>
+    <!-- #EndEditable -->
+    <link id="Link1" runat="server" rel="shortcut icon" href="~/favicon.ico" type="image/x-icon"/>
+    <link id="Link2" runat="server" rel="icon" href="~/favicon.ico" type="image/ico"/>
+    <link href="~/styles/style2.css" media="screen" rel="stylesheet" title="CSS" type="text/css" />
+</head>
+<body>
+    <!-- Begin Container -->
+    <div id="container" style="left: 0px; top: 0px; height: 272px;">
+	    <!-- Begin Masthead -->
+	    <div id="masthead">
+		    <p style="height: 139px; font: xx-large serif"><b>The
+		    Veteran
+		    Program</b></p><br/>
+		    <p><em>"Together Meeting Your Needs"</em></p>
+            <h1 style="visibility: hidden">Planning a funeral in advance of death is called pre need funeral planning. Pre need funeral plans outline wishes for funeral services and interment. To avoid inflationary funeral costs, prepaid funeral plans are available.</h1>
+	    </div>
+	    <!-- End Masthead -->
+	    <!-- Begin Navigation -->
+	    <div id="navigationmast">
+		    <ul>
+            <li><a href= '<%=ResolveClientUrl("../default.aspx") %>'>Home</a></li>
+			<li><a href= '<%=ResolveClientUrl("../about.aspx") %>'>About Us</a></li>
+			<li><a href= '<%=ResolveClientUrl("benefits/benefits.aspx") %>'>Benefits</a></li>
+            <li><a href= '<%=ResolveClientUrl("cemeteries/cemeteries.aspx") %>'>National Cemeteries</a></li>
+			<li><a href= '<%=ResolveClientUrl("testimonals/testimonials.aspx") %>'>Testimonials</a></li>
+			<li><a href= '<%=ResolveClientUrl("../contactus.aspx") %>'>Contact Us</a></li>
+			</ul>
+	    </div>
+    </div>
+    <!-- End Navigation -->
+    <asp:ContentPlaceHolder ID="MainContent1" runat="server">
+
+    </asp:ContentPlaceHolder>
+    <asp:ContentPlaceHolder ID="MainContent2" runat="server">
+
+    </asp:ContentPlaceHolder>        	
+	<!-- Begin Footer -->
+	<div id="footer">
+		<p><a href= '<%=ResolveClientUrl("../default.aspx") %>'>Home</a> | 
+		<a href= '<%=ResolveClientUrl("../about.aspx") %>'>About Us</a> | 
+		<a href= '<%=ResolveClientUrl("testimonals/testimonials.aspx") %>'>Testimonials</a> |
+		<a href= '<%=ResolveClientUrl("../contactus.aspx") %>'>Contact Us</a> |
+		<a href= '<%=ResolveClientUrl("benefits/benefits.aspx") %>'>Benefits</a> |
+		<a href= '<%=ResolveClientUrl("cemeteries/cemeteries.aspx") %>'>National Cemeteries</a> | 
+		<br />The Veteran Program is not affiliated with the U.S. Department of Veteran Affairs. Copyright � 2014 Eternal Solutions - All Rights Reserved. Web Desgn and SEO - <a href="http://creativeteksolutions.com">Creative Tek Solutions</a></p>
+	</div>
+	<!-- End Footer -->
+	<!-- End Container -->
+</body>
+</html>

@@ -1,0 +1,118 @@
+<%@ Page Title="PLMS - Customer Lookup" Language="C#" Debug="true" AutoEventWireup="true" CodeFile="custlookuplnhp.aspx.cs" Inherits="custlookuplnhp" %>
+
+<%@ Register Assembly="obout_Interface" Namespace="Obout.Interface" TagPrefix="obout" %>
+<%@ Register Assembly="obout_Calendar2_Net" Namespace="OboutInc.Calendar2" TagPrefix="obout" %>
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Customer Search by Last Name or Phone Number</title>
+    <style>
+        .modalBackground { background-color: gray; z-index: 10000; }
+        .ob_iCboIC, .ob_iDdlIC { z-index: 100002 !important; }
+        .ob_iDdlICBC li { float: left; width: 125px; }
+    </style>
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            Obout.Interface.OboutCore.getLeft = function (element) {
+                return $common.getLocation(element).x;
+            };
+            Obout.Interface.OboutCore.getTop = function (element) {
+                return $common.getLocation(element).y;
+            };
+        });
+
+        function PrintContent() {
+            var printWin = window.open('', '', 'width=1000,height=800');
+            var content = document.getElementById("<%= dvContent.ClientID %>").outerHTML;
+            printWin.document.write(content);
+            printWin.document.close();
+            printWin.print();
+            printWin.close();
+        }
+
+        window.onerror = function (msg) {
+            return msg && (msg.includes('Handler was not added') || msg.includes('b._events is undefined'));
+        };
+    </script>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server" ScriptMode="Release" />
+
+        <h3>Sales Lead Database</h3>
+        <h3>Customer Search by Last Name or Phone Number</h3>
+
+        <!-- LoginView removed: authentication disabled -->
+        <div class="auth-removed">Authentication removed; role-based messages removed.</div>
+
+        <div style="width: 750px;">
+            <asp:Label ID="Label1" runat="server" Width="100px"></asp:Label>
+            <p>Please enter the Customer's Last Name or Home Phone Number:</p>
+            <asp:TextBox ID="TextBox1" runat="server" ToolTip="Enter Customer's last name or phone number"></asp:TextBox>
+            <asp:Button ID="Button1" runat="server" Text="Search" />
+        </div>
+
+        <br />
+
+        <asp:GridView ID="GridView1" runat="server" AllowPaging="True" AllowSorting="True"
+            AutoGenerateColumns="False" DataKeyNames="ID" DataSourceID="SqlDataSource1"
+            OnRowCreated="OnRowCreated">
+            <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+            <RowStyle BackColor="#EFF3FB" />
+            <AlternatingRowStyle BackColor="White" />
+            <Columns>
+                <asp:BoundField DataField="ID" HeaderText="ID" Visible="False" />
+                <asp:BoundField DataField="LastName" HeaderText="Last Name" SortExpression="LastName" />
+                <asp:BoundField DataField="FirstName" HeaderText="First Name" SortExpression="FirstName" />
+                <asp:BoundField DataField="HomePhone" HeaderText="Home Phone" SortExpression="HomePhone" />
+                <asp:BoundField DataField="EmailAddress" HeaderText="Email" SortExpression="EmailAddress" />
+                <asp:TemplateField>
+                    <ItemTemplate>
+                        <asp:ImageButton ID="EditButton" runat="server" CommandName="Edit"
+                            ImageUrl="~/Edit.jpg" Width="25" Height="25" />
+                        <asp:ImageButton ID="DeleteButton" runat="server" CommandName="Delete"
+                            ImageUrl="~/delete.png" Width="25" Height="25"
+                            Enabled="true" />
+                    </ItemTemplate>
+                </asp:TemplateField>
+            </Columns>
+        </asp:GridView>
+
+        <asp:SqlDataSource ID="SqlDataSource1" runat="server"
+            ConnectionString="<%$ ConnectionStrings:salespipeline %>"
+            SelectCommand="SELECT * FROM [Customers] WHERE ([LastName] LIKE '%' + @SearchText + '%') OR ([HomePhone] LIKE '%' + @SearchText + '%') OR ([MobilePhone] LIKE '%' + @SearchText + '%')">
+            <SelectParameters>
+                <asp:ControlParameter ControlID="TextBox1" Name="SearchText" PropertyName="Text" Type="String" ConvertEmptyStringToNull="True" />
+            </SelectParameters>
+        </asp:SqlDataSource>
+
+        <asp:Label ID="lblresult" runat="server" />
+        <asp:Button ID="btnShowPopup" runat="server" Style="display:none" />
+        <asp:ModalPopupExtender ID="ModalPopupExtender1" runat="server" TargetControlID="btnShowPopup"
+            PopupControlID="pnlpopup" BackgroundCssClass="modalBackground" />
+
+        <asp:Panel ID="pnlpopup" runat="server" BackColor="White" Width="700px" Style="display:none">
+            <div id="dvContent" runat="server">
+                <table style="border: solid 3px #D55500; width:100%;">
+                    <tr style="background-color:#D55500; color:White;">
+                        <th colspan="2">Customer Details</th>
+                    </tr>
+                    <tr>
+                        <td>First Name:</td>
+                        <td><asp:TextBox ID="txtfname" runat="server" /></td>
+                    </tr>
+                    <tr>
+                        <td>Last Name:</td>
+                        <td><asp:TextBox ID="txtlname" runat="server" /></td>
+                    </tr>
+                </table>
+                <asp:Button ID="btnUpdate" runat="server" Text="Update" OnClick="btnUpdate_Click" />
+                <asp:Button ID="btnCancel" runat="server" Text="Cancel" />
+                <button type="button" onclick="PrintContent()">Print</button>
+            </div>
+        </asp:Panel>
+    </form>
+</body>
+</html>

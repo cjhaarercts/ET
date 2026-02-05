@@ -1,0 +1,32 @@
+Server Error in '/' Application.
+Could not find control 'DropDownList' in ControlParameter 'Agent'.
+Description: An unhandled exception occurred during the execution of the current web request. Please review the stack trace for more information about the error and where it originated in the code.
+
+Exception Details: System.InvalidOperationException: Could not find control 'DropDownList' in ControlParameter 'Agent'.
+
+Source Error:
+
+
+Line 21:         {
+Line 22:             Calendar1.SelectedDate = DateTime.Now;
+Line 23:             GridView1.DataBind();
+Line 24:         }
+Line 25:     }
+
+Source File: c:\inetpub\wwwroot\tvp\custlookuplnhp.aspx.cs    Line: 23
+
+Stack Trace:
+
+
+[InvalidOperationException: Could not find control 'DropDownList' in ControlParameter 'Agent'.]
+   System.Web.UI.WebControls.ControlParameter.Evaluate(HttpContext context, Control control) +3661681
+   System.Web.UI.WebControls.Parameter.UpdateValue(HttpContext context, Control control) +72
+   System.Web.UI.WebControls.ParameterCollection.UpdateValues(HttpContext context, Control control) +130
+   System.Web.UI.WebControls.ParameterCollection.GetValues(HttpContext context, Control control) +35
+   System.Web.UI.WebControls.SqlDataSourceView.InitializeParameters(DbCommand command, ParameterCollection parameters, IDictionary exclusionList) +321
+   System.Web.UI.WebControls.SqlDataSourceView.ExecuteSelect(DataSourceSelectArguments arguments) +707
+   System.Web.UI.DataSourceView.Select(DataSourceSelectArguments arguments, DataSourceViewSelectCallback callback) +26
+   custlookuplnhp.Page_Load(Object sender, EventArgs e) in c:\inetpub\wwwroot\tvp\custlookuplnhp.aspx.cs:23
+   System.Web.UI.Control.OnLoad(EventArgs e) +108
+   System.Web.UI.Control.LoadRecursive() +90
+   System.Web.UI.Page.ProcessRequestMain(Boolean includeStagesBeforeAsyncPoint, Boolean includeStagesAfterAsyncPoint) +1533

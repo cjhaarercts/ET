@@ -1,0 +1,171 @@
+﻿@import url(layout.css);
+body
+{
+    color: #000;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: small;
+    font-style: normal;
+    background-color: #FFFFE1;
+}
+#container {
+	width: 100%;
+	margin: 0;
+	background-color: #FFFFE1;
+	position: relative;
+}
+#masthead {
+	text-align: right;
+	width: 100%;
+	background-color: #c5d5e5;
+	background-image: url('../american_flag.jpg');
+    height: 269px;
+}
+#navigation {
+	background-color: #CC0000;
+	overflow: hidden;
+}
+#page_content {
+	position: inherit;
+	width: 100%;
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #CC0000;
+}
+#column_l {
+	font-size: small;
+	font: small;
+	width: 550px;
+	position: relative;
+	margin: 0 250px 0 0;
+	padding: 0 1%;
+	background-color: #FFFFE1;
+	float: left;
+	color: #000000;
+}
+#column_r
+{
+    font-size: small;
+    font: small;
+    width: 550px;
+    position: absolute;
+    left: 525px;
+    top: 273px;
+    margin: 0 250px 0 0;
+    padding: 0 1%;
+    background-color: #FFFFE1;
+    color: #000000;
+}
+#footer {
+	background-color: #CC0000;
+	padding-bottom: 5px;
+	color: #FFFFFF;
+}
+/* Styles for Masthead */
+#masthead img {
+	float: left;
+	margin: 0;
+	padding: 0;
+}
+#masthead p {
+	font-size: large;
+	text-align: right;
+	color: #FFFFFF;
+	margin: 10px 10px 10px 0;
+	padding: 0;
+}
+/* Styles for Navigation */
+#navigationmast ul {
+	background: #CC0000;
+	list-style-type: none;
+	width: 100%;
+	position:absolute;
+	margin: 0;
+	padding: 0;
+    top: 243px;
+    left: 0px;
+    height: 25px;
+}
+#navigationmast li {
+	float: left;
+}
+#navigationmast a {
+	font: normal normal bold 100% serif;
+	color: #CC0000;
+	text-decoration: none;
+	display: block;
+	padding: 5px;
+	border: 1px solid #ca7;
+	background-color: #FFFFFF;
+}
+#navigationmast a:hover {
+	color: #000;
+	text-decoration: none;
+	border: 1px solid #ed9;
+	background-color: #CC0000;
+}
+#hpot
+{
+    display: none;
+}
+/* Styles for Content */
+h1 {
+	font-size: 2em;
+	color: #393939;
+}
+h2 {
+	font-size: 26px;
+	font: x-large;
+	color: #FFFFFF;
+	background-color: #000080;
+}
+h3 {
+	font-size: x-large;
+	color: #FFFFFF;
+	background-color: #000080;
+}
+h4 {
+	background: #000080;
+	font-size: x-large;
+	color: #FFFFFF;
+}
+h5 {
+	background: #FFFFFF;
+	font-size: large;
+	color: #000000;
+}
+h6 {
+	font-size: 0.5em;
+	color: #469;
+}
+/* Styles for Footer */
+#footer p {
+	background: #CC0000;
+	font-size: x-small;
+	text-align: center;
+	color: #FFFFFF;
+	margin: 10px;
+	padding: 1px;
+}
+#footer a {
+	color: #FFFFFF;
+	text-decoration: underline;
+}
+#footer a:hover {
+	color: #000;
+	text-decoration: none;
+}
+/* Styles for Links */
+a {
+	color: #469;
+	text-decoration: underline;
+}
+a:hover {
+	color: #000;
+	text-decoration: underline;
+}
+.style_bold {
+	font-weight: bold;
+}
+.style_italic {
+	font-style: italic;
+}
