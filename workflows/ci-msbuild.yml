@@ -29,6 +29,9 @@ jobs:
       - name: Build (Release)
         run: msbuild .\tvp.sln /m /p:Configuration=Release /p:Platform="Any CPU"
 
+      - name: NuGet Restore
+        run: nuget restore .\ET.sln -NonInteractive
+
       # Optional: only if you truly have test assemblies
       - name: Test (VSTest)
         run: |
