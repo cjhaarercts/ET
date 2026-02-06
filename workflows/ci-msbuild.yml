@@ -1,0 +1,39 @@
+name: CI (msbuild)
+
+on:
+  pull_request:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build_test:
+    name: build-test
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v2
+
+      - name: NuGet Restore
+        run: nuget restore .\ET.sln
+
+      - name: Build (Release)
+        run: msbuild .\ET.sln /m /p:Configuration=Release /p:Platform="Any CPU"
+
+      # Optional: only if you truly have test assemblies
+      - name: Test (VSTest)
+        run: |
+          $testDlls = Get-ChildItem -Recurse -Filter "*test*.dll" |
+            Where-Object { $_.FullName -notmatch "\\obj\\|\\ref\\|\\packages\\" }
+          if ($testDlls.Count -eq 0) { Write-Host "No test assemblies found. Skipping."; exit 0 }
+          vstest.console.exe $testDlls.FullName
+        shell: pwsh
