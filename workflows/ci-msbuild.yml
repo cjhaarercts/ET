@@ -24,10 +24,10 @@ jobs:
         uses: NuGet/setup-nuget@v2
 
       - name: NuGet Restore
-        run: nuget restore .\ET.sln
+        run: nuget restore .\tvp.sln
 
       - name: Build (Release)
-        run: msbuild .\ET.sln /m /p:Configuration=Release /p:Platform="Any CPU"
+        run: msbuild .\tvp.sln /m /p:Configuration=Release /p:Platform="Any CPU"
 
       # Optional: only if you truly have test assemblies
       - name: Test (VSTest)
