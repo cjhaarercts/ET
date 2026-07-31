@@ -40,7 +40,7 @@
 
     <h3>Customer edit screen no filters</h3>
     <!-- LoginView removed: authentication disabled -->
-        <div class="auth-removed">Authentication removed; role-based messages removed.</div>
+        <div class="auth-removed"></div>
 
     <div>
         <br />

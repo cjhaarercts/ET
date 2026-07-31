@@ -20,11 +20,13 @@
             width: 125px;
         }
     </style>
-</head>
+ </head>
 <script type="text/javascript">
     function Print() {
+        // use a data-binding expression like cluAgentActive to avoid inline code blocks
+        var dvId = '<%# dvContent.ClientID %>';
         var printWin = window.open('', '', 'left=0,top=0,width=1000,height=800,status=0');
-        printWin.document.write(document.getElementById("<%=dvContent.ClientID %>").outerHTML);
+        printWin.document.write(document.getElementById(dvId).outerHTML);
         printWin.document.close();
         printWin.focus();
         printWin.print();
@@ -50,9 +52,9 @@
 </script>
 <body>
     <h2>Sales Lead Database</h2>
+    
     <h3>Active Website Leads</h3>
-    <!-- LoginView removed: authentication disabled -->
-    <div class="auth-removed">Authentication removed; role-based messages removed.</div>
+
     <form id="form1" runat="server">
         <div>
             <asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server" ScriptMode="Release" />
@@ -219,7 +221,7 @@
                         <td align="right">Appt Date &amp; Time:</td>
                         <td>
                             <asp:TextBox runat="server" ID="txtDate" ToolTip="Using the popup calendar select a date and time for the appointment" />
-                            <obout:Calendar ID="Calendar1" runat="server" ShowTimeSelector="true" DateFormat="MM/dd/yyyy hh:mm" DatePickerMode="true" TextBoxId="txtDate" ShowSecondSelector="False" TimeSelectorType="DropDownList" DatePickerImagePath="../images/icon2.gif" OffsetTop="1"></obout:Calendar>
+                            <obout:Calendar ID="Calendar1" runat="server" ShowTimeSelector="true" DateFormat="MM/dd/yyyy hh:mm" DatePickerMode="true" TextBoxId="txtDate" ShowSecondSelector="False" TimeSelectorType="DropDownList" DatePickerImagePath="icon2.gif" OffsetTop="1"></obout:Calendar>
                         </td>
                     </tr>
                     <tr>

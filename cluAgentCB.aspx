@@ -15,8 +15,21 @@
     </style>
     <script type="text/javascript">
         function Print() {
+            // use client id emitted from code-behind to avoid inline code blocks
+            var dvId = window.dvContentClientId;
+            if (!dvId) {
+                console.error("dvContentClientId not available; print aborted.");
+                return;
+            }
+
+            var el = document.getElementById(dvId);
+            if (!el) {
+                console.error("Element with id", dvId, "not found; print aborted.");
+                return;
+            }
+
             var printWin = window.open('', '', 'left=0,top=0,width=1000,height=800,status=0');
-            printWin.document.write(document.getElementById("<%=dvContent.ClientID %>").outerHTML);
+            printWin.document.write(el.outerHTML);
             printWin.document.close();
             printWin.focus();
             printWin.print();
@@ -44,36 +57,6 @@
 <body>
     <h2>Sales Lead Database</h2>
     <h3>Call Backs by Agent</h3>
-    <!-- LoginView removed: authentication disabled -->
-        <RoleGroups>
-            <asp:RoleGroup Roles="Administrators">
-                <ContentTemplate>
-                    As an Administrator, you may edit and delete user accounts. Remember: With great power comes great responsibility!
-                </ContentTemplate>
-            </asp:RoleGroup>
-            <asp:RoleGroup Roles="Supervisors">
-                <ContentTemplate>
-                    As a Supervisor, you may edit users' Email and Comment information. Simply click the Edit button, make your changes, and then click Update.
-                </ContentTemplate>
-            </asp:RoleGroup>
-            <asp:RoleGroup Roles="Agent">
-                <ContentTemplate>
-                    As an Agent, you may view and edit the Sales Leads that are stored in the database that belong to your UserId.
-                </ContentTemplate>
-            </asp:RoleGroup>
-            <asp:RoleGroup Roles="Call Agent">
-                <ContentTemplate>
-                    As a Call Agent you may view and edit All Sales leads for all Agents.
-                </ContentTemplate>
-            </asp:RoleGroup>
-        </RoleGroups>
-        <LoggedInTemplate>
-            You are not a member of any user roles. Therefore you cannot view, edit or delete any Sales Lead information.
-        </LoggedInTemplate>
-        <AnonymousTemplate>
-            You are not logged into the system. Therefore you cannot view, edit or delete any Sales Lead information.
-        </AnonymousTemplate>
-    </asp:LoginView>
     <form id="form1" runat="server">
         <div>
             <asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server" ScriptMode="Release" />
@@ -254,7 +237,7 @@
                             <td align="right">Appt Date &amp; Time:</td>
                             <td>
                                 <asp:TextBox runat="server" ID="txtDate" ToolTip="Using the popup calendar select a date and time for the appointment" />
-                                <obout:Calendar ID="Calendar1" runat="server" ShowTimeSelector="true" DateFormat="MM/dd/yyyy hh:mm" DatePickerMode="true" TextBoxId="txtDate" ShowSecondSelector="False" TimeSelectorType="DropDownList" DatePickerImagePath="../images/icon2.gif" >
+                                <obout:Calendar ID="Calendar1" runat="server" ShowTimeSelector="true" DateFormat="MM/dd/yyyy hh:mm" DatePickerMode="true" TextBoxId="txtDate" ShowSecondSelector="False" TimeSelectorType="DropDownList" DatePickerImagePath="icon2.gif" >
                                 </obout:Calendar>
                             </td>
                         </tr>

@@ -30,6 +30,16 @@
             printWin.print();
             printWin.close();
         }
+
+        // Capture user's browser timezone offset and store in hidden field
+        // This runs when page loads to detect actual user timezone (not server timezone)
+        window.onload = function() {
+            var timezoneOffset = new Date().getTimezoneOffset(); // Minutes offset from UTC
+            var hdnField = document.getElementById('<%= hdnTimezoneOffset.ClientID %>');
+            if (hdnField) {
+                hdnField.value = timezoneOffset;
+            }
+        };
     </script>
 </head>
 <body>
@@ -198,7 +208,8 @@
                             <td align="right">Appt Date &amp; Time:</td>
                             <td>
                                 <asp:TextBox runat="server" ID="txtDate" ToolTip="Using the popup calendar select a date and time for the appointment" />
-                                <obout:Calendar ID="Calendar1" runat="server" ShowTimeSelector="true" DateFormat="MM/dd/yyyy hh:mm" DatePickerMode="true" TextBoxId="txtDate" ShowSecondSelector="False" TimeSelectorType="DropDownList" DatePickerImagePath="/images/icon2.gif"></obout:Calendar>
+                                <asp:HiddenField ID="hdnTimezoneOffset" runat="server" />
+                                <obout:Calendar ID="Calendar1" runat="server" ShowTimeSelector="true" DateFormat="MM/dd/yyyy hh:mm" DatePickerMode="true" TextBoxId="txtDate" ShowSecondSelector="False" TimeSelectorType="DropDownList" DatePickerImagePath="icon2.gif"></obout:Calendar>
                             </td>
                         </tr>
                         <tr>
@@ -251,6 +262,7 @@
                     <asp:HyperLink runat="server" ID="lnkPartner" Text="Return to Partner Pages" NavigateUrl="~/default.aspx"></asp:HyperLink>
                 </div>
             </asp:Panel>
+
         <asp:SqlDataSource ID="SqlDataSource1" runat="server"
             ConnectionString="<%$ ConnectionStrings:salespipeline %>"
             SelectCommand="SELECT * FROM [Customers] WHERE ([LastName] LIKE '%' + @SearchText + '%') OR ([HomePhone] LIKE '%' + @SearchText + '%') OR ([MobilePhone] LIKE '%' + @SearchText + '%')">
@@ -258,6 +270,15 @@
                 <asp:ControlParameter ControlID="TextBox1" Name="SearchText" PropertyName="Text" Type="String" ConvertEmptyStringToNull="True" />
             </SelectParameters>
         </asp:SqlDataSource>
+
+        <!-- New data source for the Lead Status dropdown (fixes the missing 'sds1' error).
+             Adjust SelectCommand to a dedicated status table (StatusDDL) if one exists:
+             e.g. SelectCommand="SELECT Status FROM StatusDDL ORDER BY Status" -->
+        <asp:SqlDataSource ID="sds1" runat="server"
+            ConnectionString="<%$ ConnectionStrings:salespipeline %>"
+            SelectCommand="SELECT DISTINCT Status AS Status FROM Customers ORDER BY Status">
+        </asp:SqlDataSource>
+
         </div>
     </form>
 </body>

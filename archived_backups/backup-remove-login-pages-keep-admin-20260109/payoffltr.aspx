@@ -40,7 +40,7 @@
 
     <h3>Solds needing Payoff reminder</h3>
     <!-- LoginView removed: authentication disabled -->
-        <div class="auth-removed">Authentication removed; role-based messages removed.</div>
+        <div class="auth-removed"></div>
 
 <form id="form1" runat="server">
 <asp:ToolkitScriptManager ID="ScriptManager1" runat="server" ScriptMode="Release"/>

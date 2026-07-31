@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
-using System.Data.SqlTypes;
+using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Web.UI;
@@ -12,7 +11,7 @@ using System.Web.UI.WebControls;
 
 public partial class _cluAgentSold : Page
 {
-    private readonly SqlConnection _connection = new SqlConnection(ConfigurationManager.ConnectionStrings["salespipeline"].ToString());
+    private readonly string _connectionString = ConfigurationManager.ConnectionStrings["salespipeline"].ConnectionString;
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -28,7 +27,7 @@ public partial class _cluAgentSold : Page
         if (e.Row.RowType == DataControlRowType.DataRow)
         {
             e.Row.Attributes.Add("OnMouseOver", "this.style.backgroundColor = '#ffff00';");
-            e.Row.Attributes.Add("OnMouseOut", e.Row.RowIndex % 2 == 0 ? "this.style.backgroundColor = '#FFFFFF';" : "this.style.backgroundColor = '#EFF3FB';");
+            e.Row.Attributes.Add("OnMouseOut", "this.style.backgroundColor = '" + ((e.Row.RowIndex % 2 == 0) ? "#FFFFFF" : "#EFF3FB") + "';");
         }
     }
 
@@ -53,11 +52,8 @@ public partial class _cluAgentSold : Page
         txthdischarge.Text = gvRow.Cells[16].Text;
         txtages.Text = gvRow.Cells[17].Text.Trim();
         txtnotes.Text = gvRow.Cells[18].Text.Trim();
-        txtDate.Text = gvRow.Cells[19].Text.Trim();
+        txtDate.Text = gvRow.Cells[19].Text.Trim() == "&nbsp;" ? "" : gvRow.Cells[19].Text.Trim();
         txtapptset.Text = gvRow.Cells[20].Text.Trim();
-
-        if (txtDate.Text.Equals(" "))
-            txtDate.Text = "";
 
         ModalPopupExtender1.Show();
         GridView1.DataBind();
@@ -67,14 +63,14 @@ public partial class _cluAgentSold : Page
     {
         var imageButton = sender as ImageButton;
         var gvRow = (GridViewRow)imageButton.NamingContainer;
-        var id = GridView1.DataKeys[gvRow.RowIndex].Value.ToString();
+        int id = Convert.ToInt32(GridView1.DataKeys[gvRow.RowIndex].Value);
 
-        using (var cmd = new SqlCommand("DELETE FROM Customers WHERE Id=@Id", _connection))
+        using (var con = new SqlConnection(_connectionString))
+        using (var cmd = new SqlCommand("DELETE FROM Customers WHERE Id=@Id", con))
         {
-            cmd.Parameters.AddWithValue("@Id", Convert.ToInt32(id));
-            _connection.Open();
+            cmd.Parameters.Add("@Id", SqlDbType.Int).Value = id;
+            con.Open();
             cmd.ExecuteNonQuery();
-            _connection.Close();
         }
 
         lblresult.Text = "Customer Record Deleted Successfully";
@@ -84,15 +80,29 @@ public partial class _cluAgentSold : Page
 
     protected void btnUpdate_Click(object sender, EventArgs e)
     {
-        UpdateCustomerRecord();
-        //SendEmail();
+        DateTime? appointmentDate = ParseDate(txtDate.Text);
+
+        UpdateCustomerRecord(appointmentDate);
+
+        if (appointmentDate.HasValue)
+        {
+            SendAppointmentEmail(appointmentDate.Value);
+        }
+
         ClearForm();
         GridView1.DataBind();
     }
 
-    private void UpdateCustomerRecord()
+    private void UpdateCustomerRecord(DateTime? appointmentDate)
     {
-        using (var cmd = new SqlCommand("UPDATE Customers SET FirstName=@FirstName, LastName=@LastName, Address=@Address, City=@City, State=@State, ZIP=@ZIP, HomePhone=@HomePhone, MobilePhone=@MobilePhone, EmailAddress=@EmailAddress, Branch=@Branch, HDischarge=@HDischarge, Ages=@Ages, Notes=@Notes, AppointmentSet=@AppointmentSet, Agent=@Agent, ApptSetter=@ApptSetter, Status=@Status, LDate=@LDate, CDate=@CDate WHERE Id=@Id", _connection))
+        using (var con = new SqlConnection(_connectionString))
+        using (var cmd = new SqlCommand(@"UPDATE Customers SET 
+                                            FirstName=@FirstName, LastName=@LastName, Address=@Address, City=@City, 
+                                            State=@State, ZIP=@ZIP, HomePhone=@HomePhone, MobilePhone=@MobilePhone, 
+                                            EmailAddress=@EmailAddress, Branch=@Branch, HDischarge=@HDischarge, 
+                                            Ages=@Ages, Notes=@Notes, AppointmentSet=@AppointmentSet, Agent=@Agent, 
+                                            ApptSetter=@ApptSetter, Status=@Status, LDate=@LDate, CDate=@CDate 
+                                         WHERE Id=@Id", con))
         {
             cmd.Parameters.AddWithValue("@FirstName", txtfname.Text);
             cmd.Parameters.AddWithValue("@LastName", txtlname.Text);
@@ -109,177 +119,115 @@ public partial class _cluAgentSold : Page
             cmd.Parameters.AddWithValue("@Notes", txtnotes.Text);
             cmd.Parameters.AddWithValue("@Agent", txtagent.Text);
             cmd.Parameters.AddWithValue("@ApptSetter", txtapptset.Text);
-            cmd.Parameters.AddWithValue("@AppointmentSet", string.IsNullOrWhiteSpace(txtDate.Text) ? (object)DBNull.Value : txtDate.Text);
             cmd.Parameters.AddWithValue("@Status", txtstatus.Text);
-            cmd.Parameters.AddWithValue("@Id", Convert.ToInt32(lblID.Text));
 
-            SetDateParameters(cmd);
+            // typed parameters for dates and id
+            cmd.Parameters.Add("@AppointmentSet", SqlDbType.DateTime).Value = appointmentDate.HasValue ? (object)appointmentDate.Value : DBNull.Value;
+            cmd.Parameters.Add("@LDate", SqlDbType.DateTime).Value = DBNull.Value;
+            cmd.Parameters.Add("@CDate", SqlDbType.DateTime).Value = DBNull.Value;
 
-            _connection.Open();
+            // Set LDate/CDate based on status; treat "Texted Lead" like "Left Message"
+            if (txtstatus.Text.Equals("Left Message", StringComparison.OrdinalIgnoreCase) ||
+                txtstatus.Text.Equals("Texted Lead", StringComparison.OrdinalIgnoreCase))
+            {
+                cmd.Parameters["@LDate"].Value = DateTime.Today;
+            }
+            else if (txtstatus.Text.StartsWith("Call Back", StringComparison.OrdinalIgnoreCase))
+            {
+                cmd.Parameters["@CDate"].Value = DateTime.Today;
+            }
+
+            cmd.Parameters.Add("@Id", SqlDbType.Int).Value = Convert.ToInt32(lblID.Text);
+
+            con.Open();
             cmd.ExecuteNonQuery();
-            _connection.Close();
         }
 
         lblresult.Text = "Customer Record Details Updated Successfully";
         lblresult.ForeColor = System.Drawing.Color.Green;
     }
 
-    private void SetDateParameters(SqlCommand cmd)
+    private DateTime? ParseDate(string input)
     {
-        var sqlDateNull = SqlDateTime.Null;
+        if (string.IsNullOrWhiteSpace(input))
+            return null;
 
-        if (txtstatus.Text == "None" || txtstatus.Text == "New" || txtstatus.Text == "Active" || txtstatus.Text == "Sent Mail" || txtstatus.Text == "Mail - Info" || txtstatus.Text == "Mail - FUR" || txtstatus.Text == "Needs Phone Number" || txtstatus.Text == "Last Resort" || txtstatus.Text == "Sold" || txtstatus.Text == "Dead")
-        {
-            cmd.Parameters.AddWithValue("@CDate", sqlDateNull);
-            cmd.Parameters.AddWithValue("@LDate", sqlDateNull);
-        }
-        else if (txtstatus.Text == "Left Message")
-        {
-            cmd.Parameters.AddWithValue("@LDate", DateTime.Today);
-            cmd.Parameters.AddWithValue("@CDate", sqlDateNull);
-        }
-        else if (txtstatus.Text.StartsWith("Call Back"))
-        {
-            cmd.Parameters.AddWithValue("@CDate", DateTime.Today);
-            cmd.Parameters.AddWithValue("@LDate", sqlDateNull);
-        }
+        // explicit out variable for compatibility with older compilers
+        DateTime parsed;
+        if (DateTime.TryParse(input, CultureInfo.CurrentCulture, DateTimeStyles.None, out parsed))
+            return parsed;
+
+        if (DateTime.TryParse(input, CultureInfo.InvariantCulture, DateTimeStyles.None, out parsed))
+            return parsed;
+
+        return null;
     }
 
-    private void SendEmail(string agent, DateTime appointmentDate)
+    private void SendAppointmentEmail(DateTime appointmentDate)
     {
-        string toagent = "";
-        string recipientEmail;
-        if (agent == "VPP Sharon Stangler" || agent == "Asher Sharon Stangler" || agent == "Sharon Stangler")
-            recipientEmail = "rsstangler1@gmail.com";
-        else if (agent == "VPP Richard Stangler" || agent == "Asher Richard Stangler" || agent == "Richard Stangler")
-            recipientEmail = "rjsstangler@gmail.com";
-        else if (agent == "Mary Jo Hudson")
-            recipientEmail = "maryjoveteransprogram@gmail.com";
-        else
-            recipientEmail = "cj.haarer@gmail.com";
+        string subject = string.Format("Appointment with {0} {1} on {2:MMMM d, yyyy h:mm tt}", txtfname.Text, txtlname.Text, appointmentDate);
+        string body = string.Format("You have an Appointment with {0} {1}. Home: {2}. Mobile: {3}. Branch: {4}. Discharge: {5}. Age: {6}",
+            txtfname.Text, txtlname.Text, txthphone.Text, txtmphone.Text, txtbranch.Text, txthdischarge.Text, txtages.Text);
 
-        MailMessage msg = new MailMessage
+        string agentAlias = GetAgentEmailAlias(txtagent.Text);
+        string recipient = agentAlias.Contains("@") ? agentAlias : agentAlias + "@gmail.com";
+
+        // prepare recipient lists for the shared email helper
+        var toEmails = new System.Collections.Generic.List<string>();
+        var toNames = new System.Collections.Generic.List<string>();
+        var ccEmails = new System.Collections.Generic.List<string>();
+        var ccNames = new System.Collections.Generic.List<string>();
+
+        toEmails.Add(recipient);
+        toNames.Add(txtagent.Text);
+
+        string location = txtadd.Text + " " + txtcity.Text + " " + txtstate.Text + " " + txtzip.Text;
+
+        string errorMessage;
+        bool success = EmailHelper.SendAppointmentEmailWithIcs(
+            "info@ashersolutions.com",
+            "Asher Solutions",
+            subject,
+            body,
+            appointmentDate,
+            location,
+            toEmails,
+            toNames,
+            ccEmails,
+            ccNames,
+            out errorMessage);
+
+        if (success)
         {
-            From = new MailAddress("info@ashersolutions.com", "Asher Solutions")
-        };
-
-        if (agent == "VPP Sharon Stangler")
-            toagent = "rsstangler1";
-        else if (agent == "VPP Richard Stangler")
-            toagent = "rjsstangler";
-        else if (agent == "Asher Sharon Stangler")
-            toagent = "rsstangler1";
-        else if (agent == "Asher Richard Stangler")
-            toagent = "rjsstangler";
-        else if (agent == "Sharon Stangler")
-            toagent = "rsstangler1";
-        else if (agent == "Richard Stangler")
-            toagent = "rjsstangler";
-        else if (agent == "Mary Jo Hudson")
-            toagent = "maryjoveteransprogram";
+            lblresult.Text = "Email sent successfully.";
+            lblresult.ForeColor = System.Drawing.Color.Green;
+        }
         else
-            toagent = "cj.haarer";
-
-        msg.To.Add(new MailAddress(toagent + "@gmail.com", txtagent.Text));
-        //msg.CC.Add(new MailAddress("zzzzz@xyz.com", "DEF"));// it is optional, only if required
-        DateTime dt;
-        if (!DateTime.TryParse(txtDate.Text, out dt))
         {
-            lblresult.Text = "Invalid date format.";
+            lblresult.Text = "Email error: " + errorMessage;
             lblresult.ForeColor = System.Drawing.Color.Red;
-            return;
-        }
-        msg.Body = "You have an Appointment with " + txtfname.Text.ToString() + " " + txtlname.Text.ToString() + " " + txthphone.Text.ToString() + " " + txtmphone.Text.ToString() + " " + txtbranch.Text.ToString() + " " + txthdischarge.Text.ToString() + " " + txtages.Text.ToString();
-
-        //Parse the txtdate value
-        //DateTime dt = Convert.ToDateTime(txtDate.Text);
-
-        // Now Contruct the ICS file using string builder
-        StringBuilder str = new StringBuilder();
-        str.AppendLine("BEGIN:VCALENDAR");
-        str.AppendLine("PRODID:-//Schedule a Meeting");
-        str.AppendLine("VERSION:2.0");
-        str.AppendLine("METHOD:REQUEST");
-        str.AppendLine("BEGIN:VEVENT");
-        str.AppendLine(string.Format("DTSTART:{0:yyyyMMddTHHmmssZ}", dt.ToUniversalTime().ToString("yyyyMMdd\\THHmmss\\Z")));
-        str.AppendLine(string.Format("DTSTAMP:{0:yyyyMMddTHHmmssZ}", DateTime.Now));
-        str.AppendLine(string.Format("DTEND:{0:yyyyMMddTHHmmssZ}", dt.AddMinutes(+180).ToUniversalTime().ToString("yyyyMMdd\\THHmmss\\Z")));
-
-        str.AppendLine("LOCATION: " + txtadd.Text.ToString() + " " + txtcity.Text.ToString() + " " + txtstate.Text.ToString() + " " + txtzip.Text.ToString());
-        str.AppendLine(string.Format("UID:{0}", Guid.NewGuid()));
-        str.AppendLine(string.Format("DESCRIPTION:{0}", msg.Body));
-        str.AppendLine(string.Format("X-ALT-DESC;FMTTYPE=text/html:{0}", msg.Body));
-        str.AppendLine(string.Format("SUMMARY:{0}", msg.Subject));
-        str.AppendLine(string.Format("ORGANIZER:MAILTO:{0}", msg.From.Address));
-
-        str.AppendLine(string.Format("ATTENDEE;ROLE=OWNER;CN=\"{0}\";RSVP=TRUE:mailto:{1}", msg.To[0].DisplayName, msg.To[0].Address));
-
-        str.AppendLine("BEGIN:VALARM");
-        str.AppendLine("TRIGGER:-PT30M");
-        str.AppendLine("ACTION:DISPLAY");
-        str.AppendLine("DESCRIPTION:Reminder");
-        str.AppendLine("END:VALARM");
-        str.AppendLine("END:VEVENT");
-        str.AppendLine("END:VCALENDAR");
-
-        var bytes = Encoding.UTF8.GetBytes(str.ToString());
-        var stream = new MemoryStream(bytes);
-        var attachment = new Attachment(stream, "appointment.ics", "text/calendar");
-        msg.Attachments.Add(attachment);
-
-        System.Net.ServicePointManager.ServerCertificateValidationCallback = 
-            delegate (object s, System.Security.Cryptography.X509Certificates.X509Certificate certificate,
-                    System.Security.Cryptography.X509Certificates.X509Chain chain,
-                    System.Net.Security.SslPolicyErrors sslPolicyErrors)
-        {
-            return true; // ❌ Accepts all certs – insecure!
-        };
-        //System.Net.ServicePointManager.ServerCertificateValidationCallback = null; // ✅ Accepts only valid certs             
-        System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-
-        using (SmtpClient smtpClient = new SmtpClient("smtp.ashersolutions.com", 587))
-        {
-            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-            smtpClient.UseDefaultCredentials = false;
-            smtpClient.Credentials = new NetworkCredential("info@ashersolutions.com", "Fr3343v3r&^%");
-            smtpClient.EnableSsl = true;
-
-            try
-            {
-                smtpClient.Send(msg);
-                lblresult.Text = "Email sent successfully.";
-                lblresult.ForeColor = System.Drawing.Color.Green;
-            }
-            catch (Exception ex)
-            {
-                lblresult.Text = "Email error: " + ex.Message;
-                lblresult.ForeColor = System.Drawing.Color.Red;
-            }
         }
     }
-    private string GetAgentEmail(string agent)
+
+    private string GetAgentEmailAlias(string agent)
     {
+        // classic switch for compatibility with older compilers
         switch (agent)
         {
-            case "GC Sharon Stangler":
+            case "VPP Sharon Stangler":
             case "Asher Sharon Stangler":
             case "Sharon Stangler":
                 return "rsstangler1";
-
-            case "GC Richard Stangler":
+            case "VPP Richard Stangler":
             case "Asher Richard Stangler":
             case "Richard Stangler":
                 return "rjsstangler";
-
             case "Mary Jo Hudson":
                 return "maryjoveteransprogram";
-
             case "Amy Wallace":
                 return "awallacetvp";
-
             case "Serenity":
                 return "donna.haarer";
-
             default:
                 return "cj.haarer";
         }
@@ -306,7 +254,7 @@ public partial class _cluAgentSold : Page
         }
         else
         {
-            txtbranch.ClearSelection(); // Or: txtbranch.SelectedIndex = -1;
+            txtbranch.ClearSelection();
         }
         if (txthdischarge.Items.FindByValue("") != null)
         {
@@ -314,7 +262,7 @@ public partial class _cluAgentSold : Page
         }
         else
         {
-            txthdischarge.ClearSelection(); // Or: txthdischarge.SelectedIndex = -1;
+            txthdischarge.ClearSelection();
         }
         txtages.Text = string.Empty;
         txtnotes.Text = string.Empty;
@@ -326,7 +274,7 @@ public partial class _cluAgentSold : Page
         }
         else
         {
-            txtagent.ClearSelection(); // Or: txtagent.SelectedIndex = -1;
+            txtagent.ClearSelection();
         }
         if (txtapptset.Items.FindByValue("") != null)
         {
@@ -334,7 +282,7 @@ public partial class _cluAgentSold : Page
         }
         else
         {
-            txtapptset.ClearSelection(); // Or: txtapptset.SelectedIndex = -1;
+            txtapptset.ClearSelection();
         }
         if (txtstatus.Items.FindByValue("") != null)
         {
@@ -342,7 +290,7 @@ public partial class _cluAgentSold : Page
         }
         else
         {
-            txtstatus.ClearSelection(); // Or: txtstatus.SelectedIndex = -1;
+            txtstatus.ClearSelection();
         }
 
         ModalPopupExtender1.Hide();

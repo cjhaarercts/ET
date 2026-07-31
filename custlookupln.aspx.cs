@@ -2,58 +2,40 @@
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Data.SqlTypes;
 using System.Globalization;
-using System.Drawing;
-using System.Linq;
-using System.Web;
-using System.Web.Security;
-using System.Web.UI;
-using System.Web.UI.HtmlControls;
-using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Xml.Linq;
-using AjaxControlToolkit;
-using System.Net;
+using System.IO;
 using System.Net.Mail;
 using System.Text;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
-public partial class custlookupln : System.Web.UI.Page
+public partial class custlookupln : Page
 {
-    SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["salespipeline"].ToString());
+    private readonly string _connectionString = ConfigurationManager.ConnectionStrings["salespipeline"].ConnectionString;
+
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (!Page.IsPostBack)
+        if (!IsPostBack)
         {
             Calendar1.DateMin = DateTime.Now;
-            // Set "initial" query parameters, then ...
             GridView1.DataBind();
         }
     }
+
     protected void OnRowCreated(object sender, GridViewRowEventArgs e)
     {
-        decimal RowValue;
-        RowValue = Decimal.Remainder(e.Row.RowIndex, 2);
+        if (e.Row.RowType != DataControlRowType.DataRow)
+            return;
 
-        if (e.Row.RowIndex != -1)
-            e.Row.Attributes.Add("OnMouseOver", "this.style.backgroundColor = '#ffff00';");
-
-        if ((RowValue == 0) && (e.Row.RowIndex != -1))
-        {
-            e.Row.Attributes.Add("OnMouseOut", "this.style.backgroundColor = '#FFFFFF';");
-        }
-        else if ((RowValue != 0) && (e.Row.RowIndex != -1))
-        {
-            e.Row.Attributes.Add("OnMouseOut", "this.style.backgroundColor = '#EFF3FB';");
-        }
+        e.Row.Attributes.Add("OnMouseOver", "this.style.backgroundColor = '#ffff00';");
+        e.Row.Attributes.Add("OnMouseOut", "this.style.backgroundColor = '" + ((e.Row.RowIndex % 2 == 0) ? "#FFFFFF" : "#EFF3FB") + "';");
     }
+
     protected void ImageButton1_Click(object sender, ImageClickEventArgs e)
     {
-        ImageButton ImageButton1 = sender as ImageButton;
-        string userName = String.Empty; // Authentication removed
-        ImageButton1.Visible = true; // Default: visible to all since auth removed
+        var imageButton = sender as ImageButton;
+        var gvrow = (GridViewRow)imageButton.NamingContainer;
 
-        GridViewRow gvrow = (GridViewRow)ImageButton1.NamingContainer;
         lblID.Text = GridView1.DataKeys[gvrow.RowIndex].Value.ToString();
 
         txtagent.Text = gvrow.Cells[3].Text;
@@ -71,365 +53,251 @@ public partial class custlookupln : System.Web.UI.Page
         txthdischarge.Text = gvrow.Cells[16].Text;
         txtages.Text = gvrow.Cells[17].Text;
         txtnotes.Text = gvrow.Cells[18].Text;
-        txtDate.Text = gvrow.Cells[19].Text;
+        txtDate.Text = gvrow.Cells[19].Text.Trim() == "&nbsp;" ? "" : gvrow.Cells[19].Text;
         txtapptset.Text = gvrow.Cells[20].Text;
-        if (txtDate.Text.Equals(" "))
-            txtDate.Text = "";
-        this.ModalPopupExtender1.Show();
 
-        GridView1.DataBind();
+        ModalPopupExtender1.Show();
     }
+
     protected void ImageButton2_Click(object sender, ImageClickEventArgs e)
     {
+        var imageButton = sender as ImageButton;
+        var gvrow = (GridViewRow)imageButton.NamingContainer;
+        int id = Convert.ToInt32(GridView1.DataKeys[gvrow.RowIndex].Value);
 
-        ImageButton ImageButton2 = sender as ImageButton;
-        ImageButton2.Visible = true; // Default: visible to all since auth removed
+        using (var con = new SqlConnection(_connectionString))
+        using (var cmd = new SqlCommand("DELETE FROM Customers WHERE Id = @Id", con))
+        {
+            cmd.Parameters.Add("@Id", SqlDbType.Int).Value = id;
+            con.Open();
+            cmd.ExecuteNonQuery();
+        }
 
-        GridViewRow gvrow = (GridViewRow)ImageButton2.NamingContainer;
-        string ID = GridView1.DataKeys[gvrow.RowIndex].Value.ToString();
-
-        lblID.Text = GridView1.DataKeys[gvrow.RowIndex].Value.ToString();
-        Label id = (Label)gvrow.FindControl("lblID");
-        SqlCommand cmd = new SqlCommand("delete from Customers where Id=@Id", con);
-        cmd.Parameters.AddWithValue("@Id", Convert.ToInt32(ID));
-
-        con.Open();
-
-        cmd.ExecuteNonQuery();
-        con.Close();
-        GridView1.DataBind();
         lblresult.Text = "Customer Record Deleted Successfully";
         lblresult.ForeColor = System.Drawing.Color.Green;
         GridView1.DataBind();
     }
+
     protected void btnUpdate_Click(object sender, EventArgs e)
     {
-        MailMessage msg = new MailMessage();
-        //Now we have to set the value to Mail message properties
+        DateTime? appointmentDate = ParseDate(txtDate.Text);
+        UpdateCustomerRecord(appointmentDate);
 
-        //Note Please change it to correct mail-id to use this in your application
-        msg.From = new MailAddress("info@ashersolutions.com", "Sales Lead Appointment");
-        string agent;
-        string toagent;
+        if (appointmentDate.HasValue)
+        {
+            SendEmail(txtagent.Text, appointmentDate.Value);
+        }
 
-        agent = txtagent.Text;
-        toagent = " ";
-
-        SqlDateTime sqldatenull;
-        sqldatenull = SqlDateTime.Null;
-
-        con.Open();
-        SqlCommand cmd = new SqlCommand("update Customers set FirstName=@FirstName,LastName=@LastName,Address=@Address,City=@City,State=@State,ZIP=@ZIP,HomePhone=@HomePhone,MobilePhone=@MobilePhone,EmailAddress=@EmailAddress,Branch=@Branch,HDischarge=@HDischarge,Ages=@Ages,Notes=@Notes,AppointmentSet=@AppointmentSet,Agent=@Agent,ApptSetter=@ApptSetter,Status=@Status,LDate=@LDate,CDate=@CDate where Id=@Id", con);
-        cmd.Parameters.AddWithValue("@FirstName", txtfname.Text);
-        cmd.Parameters.AddWithValue("@LastName", txtlname.Text);
-        cmd.Parameters.AddWithValue("@Address", txtadd.Text);
-        cmd.Parameters.AddWithValue("@City", txtcity.Text);
-        cmd.Parameters.AddWithValue("@State", txtstate.Text);
-        cmd.Parameters.AddWithValue("@ZIP", txtzip.Text);
-        cmd.Parameters.AddWithValue("@HomePhone", txthphone.Text);
-        cmd.Parameters.AddWithValue("@MobilePhone", txtmphone.Text);
-        cmd.Parameters.AddWithValue("@EmailAddress", txtemail.Text);
-        cmd.Parameters.AddWithValue("@Branch", txtbranch.Text);
-        cmd.Parameters.AddWithValue("@HDischarge", txthdischarge.Text);
-        cmd.Parameters.AddWithValue("@Ages", txtages.Text);
-        cmd.Parameters.AddWithValue("@Notes", txtnotes.Text);
-        cmd.Parameters.AddWithValue("@Agent", txtagent.Text);
-        cmd.Parameters.AddWithValue("@ApptSetter", txtapptset.Text);
-
-        if (txtDate.Text == "")
-            cmd.Parameters.AddWithValue("@AppointmentSet", sqldatenull);
-        else
-            cmd.Parameters.AddWithValue("@AppointmentSet", txtDate.Text);
-        if (txtstatus.Text == "None")
-        {
-            //cmd.Parameters["@CDate"].Value = DateTime.Today.AddMonths(1);
-            cmd.Parameters.AddWithValue("@CDate", sqldatenull);
-            cmd.Parameters.AddWithValue("@LDate", sqldatenull);
-        }
-        if (txtstatus.Text == "New")
-        {
-            //cmd.Parameters["@CDate"].Value = DateTime.Today.AddMonths(1);
-            cmd.Parameters.AddWithValue("@CDate", sqldatenull);
-            cmd.Parameters.AddWithValue("@LDate", sqldatenull);
-        }
-        else
-        if (txtstatus.Text == "Active")
-        {
-        //cmd.Parameters["@CDate"].Value = DateTime.Today.AddMonths(1);
-        cmd.Parameters.AddWithValue("@CDate", sqldatenull);
-        cmd.Parameters.AddWithValue("@LDate", sqldatenull);
-        }
-        else
-        if (txtstatus.Text == "Left Message")
-        {
-        //cmd.Parameters["@LDate"].Value = DateTime.Today;
-        cmd.Parameters.AddWithValue("@LDate", DateTime.Today);
-        cmd.Parameters.AddWithValue("@CDate", sqldatenull);
-        }
-        else
-        if (txtstatus.Text == "Call Back")
-        {
-        //cmd.Parameters["@LDate"].Value = DateTime.Today;
-        cmd.Parameters.AddWithValue("@CDate", DateTime.Today);
-        cmd.Parameters.AddWithValue("@LDate", sqldatenull);
-        }
-        else
-        if (txtstatus.Text == "Call Back - Jan")
-        {
-        //cmd.Parameters["@LDate"].Value = DateTime.Today;
-        cmd.Parameters.AddWithValue("@CDate", DateTime.Today);
-        cmd.Parameters.AddWithValue("@LDate", sqldatenull);
-        }
-        else
-        if (txtstatus.Text == "Call Back - Feb")
-        {
-        //cmd.Parameters["@LDate"].Value = DateTime.Today;
-        cmd.Parameters.AddWithValue("@CDate", DateTime.Today);
-        cmd.Parameters.AddWithValue("@LDate", sqldatenull);
-        }
-        else
-        if (txtstatus.Text == "Call Back - Mar")
-        {
-        //cmd.Parameters["@LDate"].Value = DateTime.Today;
-        cmd.Parameters.AddWithValue("@CDate", DateTime.Today);
-        cmd.Parameters.AddWithValue("@LDate", sqldatenull);
-        }
-        else
-        if (txtstatus.Text == "Call Back - Apr")
-        {
-        //cmd.Parameters["@LDate"].Value = DateTime.Today;
-        cmd.Parameters.AddWithValue("@CDate", DateTime.Today);
-        cmd.Parameters.AddWithValue("@LDate", sqldatenull);
-        }
-        else
-        if (txtstatus.Text == "Call Back - May")
-        {
-        //cmd.Parameters["@LDate"].Value = DateTime.Today;
-        cmd.Parameters.AddWithValue("@CDate", DateTime.Today);
-        cmd.Parameters.AddWithValue("@LDate", sqldatenull);
-        }
-        else
-        if (txtstatus.Text == "Call Back - Jun")
-        {
-        //cmd.Parameters["@LDate"].Value = DateTime.Today;
-        cmd.Parameters.AddWithValue("@CDate", DateTime.Today);
-        cmd.Parameters.AddWithValue("@LDate", sqldatenull);
-        }
-        else
-        if (txtstatus.Text == "Call Back - Jul")
-        {
-        //cmd.Parameters["@LDate"].Value = DateTime.Today;
-        cmd.Parameters.AddWithValue("@CDate", DateTime.Today);
-        cmd.Parameters.AddWithValue("@LDate", sqldatenull);
-        }
-        else
-        if (txtstatus.Text == "Call Back - Aug")
-        {
-        //cmd.Parameters["@LDate"].Value = DateTime.Today;
-        cmd.Parameters.AddWithValue("@CDate", DateTime.Today);
-        cmd.Parameters.AddWithValue("@LDate", sqldatenull);
-        }
-        else
-        if (txtstatus.Text == "Call Back - Sep")
-        {
-        //cmd.Parameters["@LDate"].Value = DateTime.Today;
-        cmd.Parameters.AddWithValue("@CDate", DateTime.Today);
-        cmd.Parameters.AddWithValue("@LDate", sqldatenull);
-        }
-        else
-        if (txtstatus.Text == "Call Back - Oct")
-        {
-        //cmd.Parameters["@LDate"].Value = DateTime.Today;
-        cmd.Parameters.AddWithValue("@CDate", DateTime.Today);
-        cmd.Parameters.AddWithValue("@LDate", sqldatenull);
-        }
-        else
-        if (txtstatus.Text == "Call Back - Nov")
-        {
-        //cmd.Parameters["@LDate"].Value = DateTime.Today;
-        cmd.Parameters.AddWithValue("@CDate", DateTime.Today);
-        cmd.Parameters.AddWithValue("@LDate", sqldatenull);
-        }
-        else
-        if (txtstatus.Text == "Call Back - Dec")
-        {
-        //cmd.Parameters["@LDate"].Value = DateTime.Today;
-        cmd.Parameters.AddWithValue("@CDate", DateTime.Today);
-        cmd.Parameters.AddWithValue("@LDate", sqldatenull);
-        }
-        else
-        if (txtstatus.Text == "Sent Mail")
-        {
-        //cmd.Parameters["@LDate"].Value = DateTime.Today;
-        cmd.Parameters.AddWithValue("@LDate", sqldatenull);
-        cmd.Parameters.AddWithValue("@CDate", sqldatenull);
-        }
-        else
-        if (txtstatus.Text == "Mail - Info")
-        {
-        //cmd.Parameters["@LDate"].Value = DateTime.Today;
-        cmd.Parameters.AddWithValue("@LDate", sqldatenull);
-        cmd.Parameters.AddWithValue("@CDate", sqldatenull);
-        }
-        else
-        if (txtstatus.Text == "Mail - FUR")
-        {
-        //cmd.Parameters["@LDate"].Value = DateTime.Today;
-        cmd.Parameters.AddWithValue("@LDate", sqldatenull);
-        cmd.Parameters.AddWithValue("@CDate", sqldatenull);
-        }
-        else
-        if (txtstatus.Text == "Needs Phone Number")
-        {
-        //cmd.Parameters["@LDate"].Value = DateTime.Today;
-        cmd.Parameters.AddWithValue("@LDate", sqldatenull);
-        cmd.Parameters.AddWithValue("@CDate", sqldatenull);
-        }
-        if (txtstatus.Text == "Last Resort")
-        {
-            //cmd.Parameters["@LDate"].Value = DateTime.Today;
-            cmd.Parameters.AddWithValue("@LDate", sqldatenull);
-            cmd.Parameters.AddWithValue("@CDate", sqldatenull);
-        }
-        else
-        if (txtstatus.Text == "Dead")
-        {
-            //cmd.Parameters["@LDate"].Value = DateTime.Today;
-            cmd.Parameters.AddWithValue("@LDate", sqldatenull);
-            cmd.Parameters.AddWithValue("@CDate", sqldatenull);
-        }
-        cmd.Parameters.AddWithValue("@Status", txtstatus.Text);
-        cmd.Parameters.AddWithValue("@Id", Convert.ToInt32(lblID.Text));
-        cmd.ExecuteNonQuery();
-        con.Close();
+        ClearForm();
         GridView1.DataBind();
-        lblresult.Text = "Customer Record Details Updated Successfully";
-        lblresult.ForeColor = System.Drawing.Color.Green;
+    }
 
-        if (txtDate.Text == "")
+    private void UpdateCustomerRecord(DateTime? appointmentDate)
+    {
+        int id = Convert.ToInt32(lblID.Text);
+
+        using (var con = new SqlConnection(_connectionString))
+        using (var cmd = new SqlCommand(@"UPDATE Customers SET 
+                                            FirstName=@FirstName, LastName=@LastName, Address=@Address, City=@City, 
+                                            State=@State, ZIP=@ZIP, HomePhone=@HomePhone, MobilePhone=@MobilePhone, 
+                                            EmailAddress=@EmailAddress, Branch=@Branch, HDischarge=@HDischarge, 
+                                            Ages=@Ages, Notes=@Notes, AppointmentSet=@AppointmentSet, Agent=@Agent, 
+                                            ApptSetter=@ApptSetter, Status=@Status, LDate=@LDate, CDate=@CDate 
+                                         WHERE Id=@Id", con))
         {
-            goto nomail;
-        }
-        GridView1.DataBind();
-        if (txtDate.Text != "")
-        {
-            if (agent == "VPP Sharon Stangler")
-                toagent = "rsstangler1";
-            else if (agent == "VPP Richard Stangler")
-                toagent = "rjsstangler";
-            else if (agent == "Asher Sharon Stangler")
-                toagent = "rsstangler1";
-            else if (agent == "Asher Richard Stangler")
-                toagent = "rjsstangler";
-            else if (agent == "Sharon Stangler")
-                toagent = "rsstangler1";
-            else if (agent == "Richard Stangler")
-                toagent = "rjsstangler";
-            else if (agent == "Mary Jo Hudson")
-                toagent = "maryjoveteransprogram";
-            else
-                toagent = "cj.haarer";
+            cmd.Parameters.AddWithValue("@FirstName", txtfname.Text);
+            cmd.Parameters.AddWithValue("@LastName", txtlname.Text);
+            cmd.Parameters.AddWithValue("@Address", txtadd.Text);
+            cmd.Parameters.AddWithValue("@City", txtcity.Text);
+            cmd.Parameters.AddWithValue("@State", txtstate.Text);
+            cmd.Parameters.AddWithValue("@ZIP", txtzip.Text);
+            cmd.Parameters.AddWithValue("@HomePhone", txthphone.Text);
+            cmd.Parameters.AddWithValue("@MobilePhone", txtmphone.Text);
+            cmd.Parameters.AddWithValue("@EmailAddress", txtemail.Text);
+            cmd.Parameters.AddWithValue("@Branch", txtbranch.Text);
+            cmd.Parameters.AddWithValue("@HDischarge", txthdischarge.Text);
+            cmd.Parameters.AddWithValue("@Ages", txtages.Text);
+            cmd.Parameters.AddWithValue("@Notes", txtnotes.Text);
+            cmd.Parameters.AddWithValue("@Agent", txtagent.Text);
+            cmd.Parameters.AddWithValue("@ApptSetter", txtapptset.Text);
+            cmd.Parameters.AddWithValue("@Status", txtstatus.Text);
 
-            msg.To.Add(new MailAddress(toagent + "@gmail.com", "txtagent.Text.ToString()"));
-            //msg.CC.Add(new MailAddress("zzzzz@xyz.com", "DEF"));// it is optional, only if required
-            msg.Subject = txtfname.Text.ToString() + " " + txtlname.Text.ToString() + " " + txtadd.Text.ToString() + " " + txtcity.Text.ToString() + " " + txtstate.Text.ToString() + " " + txtzip.Text.ToString() + " " + txthphone.Text.ToString() + " " + txtmphone.Text.ToString() + " " + txtbranch.Text.ToString() + " " + txtages.Text.ToString();
-            msg.Body = "You have an Appointment with " + txtfname.Text.ToString() + " " + txtlname.Text.ToString() + " " + txthphone.Text.ToString() + " " + txtmphone.Text.ToString() + " " + txtbranch.Text.ToString() + " " + txthdischarge.Text.ToString() + " " + txtages.Text.ToString();
+            cmd.Parameters.Add("@AppointmentSet", SqlDbType.DateTime).Value = appointmentDate.HasValue ? (object)appointmentDate.Value : DBNull.Value;
+            cmd.Parameters.Add("@LDate", SqlDbType.DateTime).Value = DBNull.Value;
+            cmd.Parameters.Add("@CDate", SqlDbType.DateTime).Value = DBNull.Value;
 
-            //Parse the txtdate value
-            DateTime dt = Convert.ToDateTime(txtDate.Text);
-
-            // Now Contruct the ICS file using string builder
-            StringBuilder str = new StringBuilder();
-            str.AppendLine("BEGIN:VCALENDAR");
-            str.AppendLine("PRODID:-//Schedule a Meeting");
-            str.AppendLine("VERSION:2.0");
-            str.AppendLine("METHOD:REQUEST");
-            str.AppendLine("BEGIN:VEVENT");
-            str.AppendLine(string.Format("DTSTART:{0:yyyyMMddTHHmmssZ}", dt.ToUniversalTime().ToString("yyyyMMdd\\THHmmss\\Z")));
-            str.AppendLine(string.Format("DTSTAMP:{0:yyyyMMddTHHmmssZ}", DateTime.Now));
-            str.AppendLine(string.Format("DTEND:{0:yyyyMMddTHHmmssZ}", dt.AddMinutes(+180).ToUniversalTime().ToString("yyyyMMdd\\THHmmss\\Z")));
-
-            //str.AppendLine(string.Format("DTSTART:{0:yyyyMMddTHHmmssZ}", DateTime.Now.AddMinutes(+330)));
-            // cjh str.AppendLine(string.Format("DTSTART:{0:yyyyMMddTHHmmssZ}", dt.AddMinutes(+300)));
-            // cjh str.AppendLine(string.Format("DTSTAMP:{0:yyyyMMddTHHmmssZ}", DateTime.Now));
-            // cjh str.AppendLine(string.Format("DTEND:{0:yyyyMMddTHHmmssZ}", DateTime.Now.AddMinutes(+660)));
-            // cjh str.AppendLine(string.Format("DTEND:{0:yyyyMMddTHHmmssZ}", dt.AddMinutes(+480)));
-            str.AppendLine("LOCATION: " + txtadd.Text.ToString() + " " + txtcity.Text.ToString() + " " + txtstate.Text.ToString() + " " + txtzip.Text.ToString());
-            str.AppendLine(string.Format("UID:{0}", Guid.NewGuid()));
-            str.AppendLine(string.Format("DESCRIPTION:{0}", msg.Body));
-            str.AppendLine(string.Format("X-ALT-DESC;FMTTYPE=text/html:{0}", msg.Body));
-            str.AppendLine(string.Format("SUMMARY:{0}", msg.Subject));
-            str.AppendLine(string.Format("ORGANIZER:MAILTO:{0}", msg.From.Address));
-
-            str.AppendLine(string.Format("ATTENDEE;ROLE=OWNER;CN=\"{0}\";RSVP=TRUE:mailto:{1}", msg.To[0].DisplayName, msg.To[0].Address));
-
-            str.AppendLine("BEGIN:VALARM");
-            str.AppendLine("TRIGGER:-PT30M");
-            str.AppendLine("ACTION:DISPLAY");
-            str.AppendLine("DESCRIPTION:Reminder");
-            str.AppendLine("END:VALARM");
-            str.AppendLine("END:VEVENT");
-            str.AppendLine("END:VCALENDAR");
-
-            //Now sending a mail with attachment ICS file.                     
-            // System.Net.Mail.SmtpClient smtpclient = new System.Net.Mail.SmtpClient();
-
-            //SmtpClient smtpclient = new SmtpClient("localhost");
-            SmtpClient smtpclient = new SmtpClient("smtp.ashersolutionsinc.com");
-            smtpclient.DeliveryMethod = SmtpDeliveryMethod.Network;
-            smtpclient.UseDefaultCredentials = false;
-            smtpclient.Credentials = new System.Net.NetworkCredential("info@ashersolutionsunc.com", "L3tm31npl3@s3!#", "");
-            smtpclient.Port = 587;
-            smtpclient.EnableSsl = false;
-
-            // Credentials are necessary if the server requires the client  
-            // to authenticate before it will send e-mail on the client's behalf.
-            //NetworkCredential myCreds = new NetworkCredential("info@ashersolutions.com", "L3tm31npl3@s3", "");
-            //smtpclient.EnableSsl = false;
-            //smtpclient.Credentials = myCreds;
-
-            //smtpclient.Host = "smtp.eternalsolutionsllc.com"; //-------this has to given the Mailserver IP
-
-            //smtpclient.Credentials = System.Net.CredentialCache.DefaultNetworkCredentials;				
-
-            System.Net.Mime.ContentType contype = new System.Net.Mime.ContentType("text/calendar");
-            contype.Parameters.Add("method", "REQUEST");
-            contype.Parameters.Add("name", "Meeting.ics");
-            AlternateView avCal = AlternateView.CreateAlternateViewFromString(str.ToString(), contype);
-            msg.AlternateViews.Add(avCal);
-            smtpclient.Send(msg);
-        }
-    nomail:
-        {
-            // Clear the validators 
-            foreach (IValidator ctrl in Validators)
+            // Set LDate/CDate based on status; treat "Texted Lead" like "Left Message"
+            if (txtstatus.Text.Equals("Left Message", StringComparison.OrdinalIgnoreCase) ||
+                txtstatus.Text.Equals("Texted Lead", StringComparison.OrdinalIgnoreCase))
             {
-                ctrl.IsValid = true;
+                cmd.Parameters["@LDate"].Value = DateTime.Today;
+            }
+            else if (txtstatus.Text.StartsWith("Call Back", StringComparison.OrdinalIgnoreCase))
+            {
+                cmd.Parameters["@CDate"].Value = DateTime.Today;
             }
 
-            // Clear the control contents 
-            txtfname.Text = String.Empty;
-            txtlname.Text = String.Empty;
-            txtadd.Text = String.Empty;
-            txtcity.Text = String.Empty;
-            txtstate.Text = String.Empty;
-            txtzip.Text = String.Empty;
-            txtmphone.Text = String.Empty;
-            txtemail.Text = String.Empty;
-            //txtbranch.Text = String.Empty;
-            //txthdischarge.Text = String.Empty;
-            txtages.Text = String.Empty;
-            txtnotes.Text = String.Empty;
-            txtDate.Text = String.Empty;
-            Calendar1.SelectedDate = new DateTime(0);
-            //txtagent.Text = String.Empty;
-            //txtapptset.Text = String.Empty;
-            //txtstatus.Text = String.Empty; 
+            cmd.Parameters.Add("@Id", SqlDbType.Int).Value = id;
 
-            //Close the popup 
-            ModalPopupExtender1.Hide();
+            con.Open();
+            cmd.ExecuteNonQuery();
         }
-        GridView1.DataBind();
 
+        lblresult.Text = "Customer Record Details Updated Successfully";
+        lblresult.ForeColor = System.Drawing.Color.Green;
+    }
+
+    private DateTime? ParseDate(string input)
+    {
+        if (string.IsNullOrWhiteSpace(input))
+            return null;
+
+        DateTime dt;
+        if (DateTime.TryParse(input, CultureInfo.CurrentCulture, DateTimeStyles.None, out dt))
+            return dt;
+
+        if (DateTime.TryParse(input, CultureInfo.InvariantCulture, DateTimeStyles.None, out dt))
+            return dt;
+
+        return null;
+    }
+
+    private void SendEmail(string agent, DateTime appointmentDate)
+    {
+        // map to primary recipient and optional gmail alias
+        string primaryRecipient;
+        string gmailAlias;
+
+        switch (agent)
+        {
+            case "VPP Sharon Stangler":
+            case "Asher Sharon Stangler":
+            case "Sharon Stangler":
+                primaryRecipient = "rsstangler1@gmail.com";
+                gmailAlias = "rsstangler1";
+                break;
+            case "VPP Richard Stangler":
+            case "Asher Richard Stangler":
+            case "Richard Stangler":
+                primaryRecipient = "rjsstangler@gmail.com";
+                gmailAlias = "rjsstangler";
+                break;
+            case "Mary Jo Hudson":
+                primaryRecipient = "maryjoveteransprogram@gmail.com";
+                gmailAlias = "maryjoveteransprogram";
+                break;
+            case "Amy Wallace":
+                primaryRecipient = "awallacetvp@gmail.com";
+                gmailAlias = "awallacetvp";
+                break;
+            default:
+                primaryRecipient = "cj.haarer@gmail.com";
+                gmailAlias = "cj.haarer";
+                break;
+        }
+
+        string subject = string.Format("Appointment with {0} {1} on {2:MMMM d, yyyy h:mm tt}", txtfname.Text, txtlname.Text, appointmentDate);
+        string body = string.Format("You have an Appointment with {0} {1}. Home: {2}. Mobile: {3}. Branch: {4}. Discharge: {5}. Age: {6}", txtfname.Text, txtlname.Text, txthphone.Text, txtmphone.Text, txtbranch.Text, txthdischarge.Text, txtages.Text);
+
+        using (var msg = new MailMessage())
+        {
+            msg.From = new MailAddress("info@ashersolutions.com", "Sales Lead Appointment");
+            msg.Subject = subject;
+            msg.Body = body;
+            msg.IsBodyHtml = false;
+            msg.To.Add(new MailAddress(primaryRecipient, txtagent.Text));
+
+            // add gmail alias as CC if different
+            try
+            {
+                var agentGmail = gmailAlias + "@gmail.com";
+                if (!string.Equals(agentGmail, primaryRecipient, StringComparison.OrdinalIgnoreCase))
+                {
+                    msg.CC.Add(new MailAddress(agentGmail, txtagent.Text));
+                }
+            }
+            catch
+            {
+                // ignore malformed alias
+            }
+
+            var sb = new StringBuilder();
+            sb.AppendLine("BEGIN:VCALENDAR");
+            sb.AppendLine("PRODID:-//Schedule a Meeting");
+            sb.AppendLine("VERSION:2.0");
+            sb.AppendLine("METHOD:REQUEST");
+            sb.AppendLine("BEGIN:VEVENT");
+            sb.AppendLine("DTSTART:" + appointmentDate.ToUniversalTime().ToString("yyyyMMdd\\THHmmss\\Z"));
+            sb.AppendLine("DTSTAMP:" + DateTime.UtcNow.ToString("yyyyMMdd\\THHmmss\\Z"));
+            sb.AppendLine("DTEND:" + appointmentDate.AddMinutes(180).ToUniversalTime().ToString("yyyyMMdd\\THHmmss\\Z"));
+            sb.AppendLine("LOCATION: " + txtadd.Text + " " + txtcity.Text + " " + txtstate.Text + " " + txtzip.Text);
+            sb.AppendLine(string.Format("UID:{0}", Guid.NewGuid()));
+            sb.AppendLine(string.Format("DESCRIPTION:{0}", msg.Body));
+            sb.AppendLine(string.Format("X-ALT-DESC;FMTTYPE=text/html:{0}", msg.Body));
+            sb.AppendLine(string.Format("SUMMARY:{0}", msg.Subject));
+            sb.AppendLine(string.Format("ORGANIZER:MAILTO:{0}", msg.From.Address));
+            if (msg.To.Count > 0)
+            {
+                sb.AppendLine(string.Format("ATTENDEE;ROLE=OWNER;CN=\"{0}\";RSVP=TRUE:mailto:{1}", msg.To[0].DisplayName, msg.To[0].Address));
+            }
+            sb.AppendLine("BEGIN:VALARM");
+            sb.AppendLine("TRIGGER:-PT30M");
+            sb.AppendLine("ACTION:DISPLAY");
+            sb.AppendLine("DESCRIPTION:Reminder");
+            sb.AppendLine("END:VALARM");
+            sb.AppendLine("END:VEVENT");
+            sb.AppendLine("END:VCALENDAR");
+
+            var bytes = Encoding.UTF8.GetBytes(sb.ToString());
+            using (var stream = new MemoryStream(bytes))
+            using (var attachment = new Attachment(stream, "appointment.ics", "text/calendar"))
+            {
+                msg.Attachments.Add(attachment);
+
+                // Use SmtpClient() so web.config mailSettings are honored in different environments
+                using (var smtpClient = new SmtpClient())
+                {
+                    try
+                    {
+                        smtpClient.Send(msg);
+                        lblresult.Text = "Email sent successfully.";
+                        lblresult.ForeColor = System.Drawing.Color.Green;
+                    }
+                    catch (Exception ex)
+                    {
+                        lblresult.Text = "Email error: " + ex.Message;
+                        lblresult.ForeColor = System.Drawing.Color.Red;
+                    }
+                }
+            }
+        }
+    }
+
+    private void ClearForm()
+    {
+        foreach (IValidator ctrl in Validators)
+        {
+            ctrl.IsValid = true;
+        }
+
+        txtfname.Text = string.Empty;
+        txtlname.Text = string.Empty;
+        txtadd.Text = string.Empty;
+        txtcity.Text = string.Empty;
+        txtstate.Text = string.Empty;
+        txtzip.Text = string.Empty;
+        txtmphone.Text = string.Empty;
+        txtemail.Text = string.Empty;
+        txtbranch.Text = string.Empty;
+        txthdischarge.Text = string.Empty;
+        txtages.Text = string.Empty;
+        txtnotes.Text = string.Empty;
+        txtDate.Text = string.Empty;
+        Calendar1.SelectedDate = DateTime.MinValue;
+        txtagent.Text = string.Empty;
+        txtapptset.Text = string.Empty;
+        txtstatus.Text = string.Empty;
+
+        ModalPopupExtender1.Hide();
     }
 }

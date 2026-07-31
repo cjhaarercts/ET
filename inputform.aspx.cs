@@ -2,137 +2,112 @@
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Web;
-using System.Web.Security;
+using System.Globalization;
+using System.IO;
+using System.Net.Mail;
+using System.Text;
 using System.Web.UI;
-using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Xml.Linq;
-using AjaxControlToolkit;
-using System.Security.Permissions;
 
-public partial class _inputform : System.Web.UI.Page
+public partial class _inputform : Page
 {
+    private readonly string _connectionString = ConfigurationManager.ConnectionStrings["salespipeline"].ConnectionString;
+
     protected void Page_Load(object sender, EventArgs e)
     {
-
     }
+
     protected void Submit_Click(object sender, EventArgs e)
     {
-        int chkValue;
-        int chkValue1;
-        int chkValue2;
-        int chkValue3;
-        int chkValue4;
-        if (CheckBox.Checked)
-            {
-                chkValue = 1;
-            }
-            else
-            {
-                chkValue = 0;
-            }
-        if (CheckBox1.Checked)
-            {
-                chkValue1 = 1;
-            }
-            else
-            {
-                chkValue1 = 0;
-            }
-        if (CheckBox2.Checked)
-            {
-                chkValue2 = 1;
-            }
-            else
-            {
-                chkValue2 = 0;
-            }
-        if (CheckBox3.Checked)
-            {
-                chkValue3 = 1;
-            }
-            else
-            {
-                chkValue3 = 0;
-            }
-        if (CheckBox4.Checked)
-            {
-                chkValue4 = 1;
-            }
-        else
-            {
-                chkValue4 = 0;
-            }
+        int chkValue = CheckBox.Checked ? 1 : 0;
+        int chkValue1 = CheckBox1.Checked ? 1 : 0;
+        int chkValue2 = CheckBox2.Checked ? 1 : 0;
+        int chkValue3 = CheckBox3.Checked ? 1 : 0;
+        int chkValue4 = CheckBox4.Checked ? 1 : 0;
 
-        SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["salespipeline"].ConnectionString);
-        con.Open();
-        string insStr = "Insert into Customers (FirstName, LastName, Address, City, State, ZIP, HomePhone, MobilePhone, EmailAddress, Branch, HDischarge, Ages, Notes, Agent, Status, Web, VPP, Asher, Seminar, VPW, Created) values (@FirstName, @LastName, @Address, @City, @State, @ZIP, @HomePhone, @MobilePhone, @EmailAddress, @Branch, @HDischarge, @Ages, @Notes, @Agent, @Status, @Web, @VPP, @Asher, @Seminar, @VPW, @Created)";
-        SqlCommand insertuser = new SqlCommand(insStr, con);
-        insertuser.Parameters.AddWithValue("@FirstName", txtfname.Text);
-        insertuser.Parameters.AddWithValue("@LastName", txtlname.Text);
-        insertuser.Parameters.AddWithValue("@Address", txtadd.Text);
-        insertuser.Parameters.AddWithValue("@City", txtcity.Text);
-        insertuser.Parameters.AddWithValue("@State", txtstate.Text);
-        insertuser.Parameters.AddWithValue("@ZIP", txtzip.Text);
-        insertuser.Parameters.AddWithValue("@HomePhone", txthphone.Text);
-        insertuser.Parameters.AddWithValue("@MobilePhone", txtmphone.Text);
-        insertuser.Parameters.AddWithValue("@EmailAddress", txtemail.Text);
-        insertuser.Parameters.AddWithValue("@Branch", txtbranch.Text);
-        insertuser.Parameters.AddWithValue("@HDischarge", txthdischarge.Text);
-        insertuser.Parameters.AddWithValue("@Ages", txtages.Text);
-        insertuser.Parameters.AddWithValue("@Notes", txttype.Text);
-        insertuser.Parameters.AddWithValue("@Agent", txtagent.Text);
-        //insertuser.Parameters.AddWithValue("@Status", txtstatus.Text);
-        insertuser.Parameters.AddWithValue("@Status", "New");
-        insertuser.Parameters.AddWithValue("@VPP", chkValue1);
-        insertuser.Parameters.AddWithValue("@Asher", chkValue2);
-        insertuser.Parameters.AddWithValue("@Web", chkValue3);
-        insertuser.Parameters.AddWithValue("@Seminar", chkValue4);
-        insertuser.Parameters.AddWithValue("@VPW", chkValue);
-        insertuser.Parameters.AddWithValue("@Created", DateTime.Today);
+        const string insStr = @"
+            INSERT INTO Customers
+                (FirstName, LastName, Address, City, State, ZIP, HomePhone, MobilePhone, EmailAddress,
+                 Branch, HDischarge, Ages, Notes, Agent, Status, Web, VPP, Asher, Seminar, VPW, Created)
+            VALUES
+                (@FirstName, @LastName, @Address, @City, @State, @ZIP, @HomePhone, @MobilePhone, @EmailAddress,
+                 @Branch, @HDischarge, @Ages, @Notes, @Agent, @Status, @Web, @VPP, @Asher, @Seminar, @VPW, @Created)";
+
         try
         {
-            insertuser.ExecuteNonQuery();
-            con.Close();
-            Response.Write(Label1.Text=("Record Added"));
-            txtfname.Text = "";
-            txtlname.Text = "";
-            txtadd.Text = "";
-            txtcity.Text = "";
-            txtstate.Text = "";
-            txtzip.Text = "";
-            txthphone.Text = "";
-            txtmphone.Text = "";
-            txtemail.Text = "";
-            txtbranch.Text = "";
-            txthdischarge.Text = "";
-            txtages.Text = "";
-            txttype.Text = "";
-            txtagent.Text = "";
-            //txtstatus.Text = "";
-            chkValue = 0;
-            chkValue1 = 0;
-            chkValue2 = 0;
-            chkValue3 = 0;
-            chkValue4 = 0;
+            using (var con = new SqlConnection(_connectionString))
+            using (var cmd = new SqlCommand(insStr, con))
+            {
+                // Text fields
+                cmd.Parameters.AddWithValue("@FirstName", txtfname.Text.Trim());
+                cmd.Parameters.AddWithValue("@LastName", txtlname.Text.Trim());
+                cmd.Parameters.AddWithValue("@Address", txtadd.Text.Trim());
+                cmd.Parameters.AddWithValue("@City", txtcity.Text.Trim());
+                cmd.Parameters.AddWithValue("@State", txtstate.Text.Trim());
+                cmd.Parameters.AddWithValue("@ZIP", txtzip.Text.Trim());
+                cmd.Parameters.AddWithValue("@HomePhone", txthphone.Text.Trim());
+                cmd.Parameters.AddWithValue("@MobilePhone", txtmphone.Text.Trim());
+                cmd.Parameters.AddWithValue("@EmailAddress", txtemail.Text.Trim());
+                cmd.Parameters.AddWithValue("@Branch", txtbranch.Text.Trim());
+                cmd.Parameters.AddWithValue("@HDischarge", txthdischarge.Text.Trim());
+                cmd.Parameters.AddWithValue("@Ages", txtages.Text.Trim());
+                cmd.Parameters.AddWithValue("@Notes", txttype.Text.Trim());
+                cmd.Parameters.AddWithValue("@Agent", txtagent.Text.Trim());
+
+                // fixed status for new records
+                cmd.Parameters.AddWithValue("@Status", "New");
+
+                // flags
+                cmd.Parameters.AddWithValue("@VPP", chkValue1);
+                cmd.Parameters.AddWithValue("@Asher", chkValue2);
+                cmd.Parameters.AddWithValue("@Web", chkValue3);
+                cmd.Parameters.AddWithValue("@Seminar", chkValue4);
+                cmd.Parameters.AddWithValue("@VPW", chkValue);
+
+                // typed DateTime parameter for Created
+                cmd.Parameters.Add("@Created", SqlDbType.DateTime).Value = DateTime.Today;
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+
+            Label1.Text = "Record Added";
+            Label1.ForeColor = System.Drawing.Color.Green;
+
+            // clear the form
+            txtfname.Text = string.Empty;
+            txtlname.Text = string.Empty;
+            txtadd.Text = string.Empty;
+            txtcity.Text = string.Empty;
+            txtstate.Text = string.Empty;
+            txtzip.Text = string.Empty;
+            txthphone.Text = string.Empty;
+            txtmphone.Text = string.Empty;
+            txtemail.Text = string.Empty;
+            txtbranch.Text = string.Empty;
+            txthdischarge.Text = string.Empty;
+            txtages.Text = string.Empty;
+            txttype.Text = string.Empty;
+            txtagent.Text = string.Empty;
+
+            CheckBox.Checked = false;
+            CheckBox1.Checked = false;
+            CheckBox2.Checked = false;
+            CheckBox3.Checked = false;
+            CheckBox4.Checked = false;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            Response.Write("Something really bad happened .... Please try again </br>");
-        }
-        finally
-        {
-            //other stuff here
+            // Surface a friendly message; include exception message for diagnostics
+            Label1.Text = "Error adding record: " + ex.Message;
+            Label1.ForeColor = System.Drawing.Color.Red;
         }
     }
+
     protected void Button1_Click(object sender, EventArgs e)
-        {
-            Session["New"] = null;
-            // Login redirect removed as authentication is disabled
-        }
+    {
+        Session["New"] = null;
+        // authentication/redirect removed intentionally
+    }
 }
 

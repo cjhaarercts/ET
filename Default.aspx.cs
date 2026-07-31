@@ -18,35 +18,15 @@ using System.Net;
 using System.Net.Mail;
 using System.Text;
 
-
 public partial class _Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        // Authentication removed - always show anonymous view
-        WelcomeBackMessage.Text = String.Empty;
-        AuthenticatedMessagePanel.Visible = false;
-        AnonymousMessagePanel.Visible = true;
-
-        SetButtonVisibility();
-    }
-
-    protected void NavigateToPage(object sender, EventArgs e)
-    {
-        var button = sender as Button;
-        if (button != null)
+        // Authentication/authorization removed for PLMS.
+        // Show a friendly message; the master page contains PLMS navigation.
+        if (!IsPostBack)
         {
-            Response.Redirect(button.CommandArgument);
+            WelcomeBackMessage.Text = "Welcome to the Partner Lead Management System (PLMS).";
         }
-    }
-
-    private void SetButtonVisibility()
-    {
-        bool isAdminOrSupervisor = false; // roles removed
-
-        Button15.Visible = isAdminOrSupervisor;
-        Button21.Visible = isAdminOrSupervisor;
-        Button16.Visible = isAdminOrSupervisor;
-        DButton.Visible = isAdminOrSupervisor;
     }
 }

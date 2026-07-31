@@ -26,38 +26,52 @@
 </head>
     <script type="text/javascript">
         function Print() {
+            // use the client id emitted by the server-side script registered in the code-behind
+            var dvId = window.dvContentClientId;
+            if (!dvId) {
+                console.error("dvContentClientId not found. Print aborted.");
+                return;
+            }
+
+            var el = document.getElementById(dvId);
+            if (!el) {
+                console.error("Element with id", dvId, "not found. Print aborted.");
+                return;
+            }
+
             var printWin = window.open('', '', 'left=0,top=0,width=1000,height=800,status=0');
-            printWin.document.write(document.getElementById("<%=dvContent.ClientID %>").outerHTML);
+            printWin.document.write(el.outerHTML);
             printWin.document.close();
             printWin.focus();
             printWin.print();
             printWin.close();
         }
+
         window.onerror = function (msg, url, num) {
             if (msg) {
                 var isAddHandlerException = msg.indexOf('Handler was not added through the Sys.UI.DomEvent.addHandler method.') !== -1
                                             || msg.indexOf('b._events is undefined') !== -1;
-                return isAddHandlerException; /* if it is an add handler exception then return true because we are not interested in it. */
+                return isAddHandlerException; /* ignore known addHandler exception */
             }
-        }
+        };
+
         window.onload = function () {
             Obout.Interface.OboutCore.getLeft = function (element) {
                 var position = $common.getLocation(element);
                 return position.x;
-            }
+            };
 
             Obout.Interface.OboutCore.getTop = function (element) {
                 var position = $common.getLocation(element);
                 return position.y;
-            }
-        }
+            };
+        };
     </script> 
 <body>
     <h3>Sales Lead Database</h3>
 
     <h3>Customer Search by Phone number</h3>
-    <!-- LoginView removed: authentication disabled -->
-        <div class="auth-removed">Authentication removed; role-based messages removed.</div>
+
 <form id="form1" runat="server">
 <div>
      <asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server" ScriptMode="Release"/>
@@ -271,7 +285,7 @@
              ShowTimeSelector="true"
              DateFormat="MM/dd/yyyy hh:mm"
              DatePickerMode="true"
-             TextBoxId="txtDate" ShowSecondSelector="False" TimeSelectorType="DropDownList" DatePickerImagePath="../images/icon2.gif" >
+             TextBoxId="txtDate" ShowSecondSelector="False" TimeSelectorType="DropDownList" DatePickerImagePath="icon2.gif" >
          </obout:Calendar>
      </td>
 </tr>

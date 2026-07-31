@@ -64,7 +64,7 @@
              Columns="1"
              DateFormat="yyyy-MM-dd"
              DatePickerMode="true"
-             TextBoxId="EndDate" ShowSecondSelector="False" TimeSelectorType="HtmlList" DatePickerImagePath="../images/icon2.gif" DateMin="01/01/2011" >
+             TextBoxId="EndDate" ShowSecondSelector="False" TimeSelectorType="HtmlList" DateMin="01/01/2011" DatePickerImagePath="~/images/icon2.gif">
          </obout:Calendar>
             <br />
             <br />

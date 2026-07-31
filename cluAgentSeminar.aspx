@@ -26,11 +26,13 @@
     width: 125px;
     }
 </style>
-</head>
+ </head>
     <script type="text/javascript">
         function Print() {
+            // use a data-binding expression like cluAgentActive to avoid inline code blocks
+            var dvId = '<%# dvContent.ClientID %>';
             var printWin = window.open('', '', 'left=0,top=0,width=1000,height=800,status=0');
-            printWin.document.write(document.getElementById("<%=dvContent.ClientID %>").outerHTML);
+            printWin.document.write(document.getElementById(dvId).outerHTML);
             printWin.document.close();
             printWin.focus();
             printWin.print();
@@ -59,40 +61,6 @@
     <h2>Sales Lead Database</h2>
  
     <h3>Seminar Leads by Agent</h3>
-    <!-- LoginView removed: authentication disabled -->
-            <RoleGroups>
-                <asp:RoleGroup Roles="Administrators">
-                    <ContentTemplate>
-                        As an Administrator, you may edit and delete user accounts. Remember: With great 
-                        power comes great responsibility!
-                    </ContentTemplate>
-                </asp:RoleGroup>
-                <asp:RoleGroup Roles="Supervisors">
-                    <ContentTemplate>
-                        As a Supervisor, you may edit users' Email and Comment information. Simply click 
-                        the Edit button, make your changes, and then click Update.
-                    </ContentTemplate>
-                </asp:RoleGroup>
-                <asp:RoleGroup Roles="Agent">
-                    <ContentTemplate>
-                        As an Agent, you may view and edit the Sales Leads that are stored in the database that
-                        belong to your UserId.
-                    </ContentTemplate>
-                </asp:RoleGroup>
-                <asp:RoleGroup Roles="Call Agent">
-                    <ContentTemplate>
-                        As a Call Agent you may view and edit All Sales leads for all Agents.
-                    </ContentTemplate>
-                </asp:RoleGroup>
-            </RoleGroups>
-            <LoggedInTemplate>
-                You are not a member of any user roles. Therefore you cannot view, edit or delete 
-                any Sales Lead information.
-            </LoggedInTemplate>
-            <AnonymousTemplate>
-                You are not logged into the system. Therefore you cannot view, edit or delete any 
-                Sales Lead information.
-            </AnonymousTemplate>
 
 <form id="form1" runat="server">
 <div>

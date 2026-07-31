@@ -28,71 +28,31 @@
 </style>
     <script type="text/javascript">
         function Print() {
+            var dvId = window.dvContentClientId;
+            if (!dvId) {
+                console.error("dvContentClientId not available; print aborted.");
+                return;
+            }
+
+            var el = document.getElementById(dvId);
+            if (!el) {
+                console.error("Element with id", dvId, "not found; print aborted.");
+                return;
+            }
+
             var printWin = window.open('', '', 'left=0,top=0,width=1000,height=800,status=0');
-            printWin.document.write(document.getElementById("<%=dvContent.ClientID %>").outerHTML);
+            printWin.document.write(el.outerHTML);
             printWin.document.close();
             printWin.focus();
             printWin.print();
             printWin.close();
         }
-        window.onerror = function (msg, url, num) {
-            if (msg) {
-                var isAddHandlerException = msg.indexOf('Handler was not added through the Sys.UI.DomEvent.addHandler method.') !== -1
-                                            || msg.indexOf('b._events is undefined') !== -1;
-                return isAddHandlerException; /* if it is an add handler exception then return true because we are not interested in it. */
-            }
-        }
-        window.onload = function () {
-            Obout.Interface.OboutCore.getLeft = function (element) {
-                var position = $common.getLocation(element);
-                return position.x;
-            }
-
-            Obout.Interface.OboutCore.getTop = function (element) {
-                var position = $common.getLocation(element);
-                return position.y;
-            }
-        }
-</script>
+    </script>
+</head>
 <body>
     <h2>Sales Lead Database</h2>
 
     <h3>Call Backs by Agent</h3>
-    <!-- LoginView removed: authentication disabled -->
-            <RoleGroups>
-                <asp:RoleGroup Roles="Administrators">
-                    <ContentTemplate>
-                        As an Administrator, you may edit and delete user accounts. Remember: With great 
-                        power comes great responsibility!
-                    </ContentTemplate>
-                </asp:RoleGroup>
-                <asp:RoleGroup Roles="Supervisors">
-                    <ContentTemplate>
-                        As a Supervisor, you may edit users&#39; Email and Comment information. Simply click 
-                        the Edit button, make your changes, and then click Update.
-                    </ContentTemplate>
-                </asp:RoleGroup>
-                <asp:RoleGroup Roles="Agent">
-                    <ContentTemplate>
-                        As an Agent, you may view and edit the Sales Leads that are stored in the database that
-                        belong to your UserId.
-                    </ContentTemplate>
-                </asp:RoleGroup>
-                <asp:RoleGroup Roles="Call Agent">
-                    <ContentTemplate>
-                        As a Call Agent you may view and edit All Sales leads for all Agents.
-                    </ContentTemplate>
-                </asp:RoleGroup>
-            </RoleGroups>
-            <LoggedInTemplate>
-                You are not a member of any user roles. Therefore you cannot view, edit or delete 
-                any Sales Lead information.
-            </LoggedInTemplate>
-            <AnonymousTemplate>
-                You are not logged into the system. Therefore you cannot view, edit or delete any 
-                Sale Lead information.
-            </AnonymousTemplate>
-
 <form id="form1" runat="server">
 <div>
      <asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server" ScriptMode="Release" />
@@ -330,7 +290,7 @@
              ShowTimeSelector="true"
              DateFormat="MM/dd/yyyy hh:mm"
              DatePickerMode="true"
-             TextBoxId="txtDate" ShowSecondSelector="False" TimeSelectorType="DropDownList" DatePickerImagePath="../images/icon2.gif" >
+             TextBoxId="txtDate" ShowSecondSelector="False" TimeSelectorType="DropDownList" DatePickerImagePath="icon2.gif" >
          </obout:Calendar>
      </td>
 </tr>

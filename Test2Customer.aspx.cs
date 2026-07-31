@@ -229,38 +229,18 @@ public partial class tvp_Customer : System.Web.UI.Page
             //Parse the txtdate value
             DateTime dt = Convert.ToDateTime(txtDate.Text);
 
-            // Now Contruct the ICS file using string builder
-            StringBuilder str = new StringBuilder();
-            str.AppendLine("BEGIN:VCALENDAR");
-            str.AppendLine("PRODID:-//Schedule a Meeting");
-            str.AppendLine("VERSION:2.0");
-            str.AppendLine("METHOD:REQUEST");
-            str.AppendLine("BEGIN:VEVENT");
-            //str.AppendLine(string.Format("DTSTART:{0:yyyyMMddTHHmmssZ}", DateTime.Now.AddMinutes(+330)));
-            str.AppendLine(string.Format("DTSTART:{0:yyyyMMddTHHmmssZ}", dt.AddMinutes(+300)));
-            str.AppendLine(string.Format("DTSTAMP:{0:yyyyMMddTHHmmssZ}", DateTime.Now));
-            //str.AppendLine(string.Format("DTEND:{0:yyyyMMddTHHmmssZ}", DateTime.Now.AddMinutes(+660)));
-            str.AppendLine(string.Format("DTEND:{0:yyyyMMddTHHmmssZ}", dt.AddMinutes(+480)));
-            str.AppendLine("LOCATION: " + txtadd.Text.ToString() + " " + txtcity.Text.ToString() + " " + txtstate.Text.ToString() + " " + txtzip.Text.ToString());
-            str.AppendLine(string.Format("UID:{0}", Guid.NewGuid()));
-            str.AppendLine(string.Format("DESCRIPTION:{0}", msg.Body));
-            str.AppendLine(string.Format("X-ALT-DESC;FMTTYPE=text/html:{0}", msg.Body));
-            str.AppendLine(string.Format("SUMMARY:{0}", msg.Subject));
-            str.AppendLine(string.Format("ORGANIZER:MAILTO:{0}", msg.From.Address));
-
-            str.AppendLine(string.Format("ATTENDEE;ROLE=OWNER;CN=\"{0}\";RSVP=TRUE:mailto:{1}", msg.To[0].DisplayName, msg.To[0].Address));
-
-            str.AppendLine("BEGIN:VALARM");
-            str.AppendLine("TRIGGER:-PT15M");
-            str.AppendLine("ACTION:DISPLAY");
-            str.AppendLine("DESCRIPTION:Reminder");
-            str.AppendLine("END:VALARM");
-            str.AppendLine("END:VEVENT");
-            str.AppendLine("END:VCALENDAR");
+            // Build ICS via shared helper so format stays consistent
+            string location = txtadd.Text + " " + txtcity.Text + " " + txtstate.Text + " " + txtzip.Text;
+            string ics = EmailHelper.BuildIcsContent(
+                dt,
+                location,
+                msg.Body,
+                msg.Subject,
+                msg.From.Address,
+                msg.To[0].DisplayName,
+                msg.To[0].Address);
 
             //Now sending a mail with attachment ICS file.                     
-            // System.Net.Mail.SmtpClient smtpclient = new System.Net.Mail.SmtpClient();
-
             SmtpClient smtpclient = new SmtpClient("localhost");
             //SmtpClient smtpclient = new SmtpClient("smtp.eternalsolutionsllc.com", 2525);
             // Credentials are necessary if the server requires the client  
@@ -276,7 +256,7 @@ public partial class tvp_Customer : System.Web.UI.Page
             System.Net.Mime.ContentType contype = new System.Net.Mime.ContentType("text/calendar");
             contype.Parameters.Add("method", "REQUEST");
             contype.Parameters.Add("name", "Meeting.ics");
-            AlternateView avCal = AlternateView.CreateAlternateViewFromString(str.ToString(), contype);
+            AlternateView avCal = AlternateView.CreateAlternateViewFromString(ics, contype);
             msg.AlternateViews.Add(avCal);
             smtpclient.Send(msg);
         }

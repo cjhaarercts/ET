@@ -24,12 +24,14 @@
     float: left;
     width: 125px;
     }
-</style>
+ </style>
 </head>
     <script type="text/javascript">
         function Print() {
+            // use a data-binding expression like cluAgentActive to avoid inline code blocks
+            var dvId = '<%# dvContent.ClientID %>';
             var printWin = window.open('', '', 'left=0,top=0,width=1000,height=800,status=0');
-            printWin.document.write(document.getElementById("<%=dvContent.ClientID %>").outerHTML);
+            printWin.document.write(document.getElementById(dvId).outerHTML);
             printWin.document.close();
             printWin.focus();
             printWin.print();
@@ -58,8 +60,7 @@
     <h2>Sales Lead Database</h2>
     
     <h3>Search for Customer by Last Name</h3>
-    <!-- LoginView removed: authentication disabled -->
-        <div class="auth-removed">Authentication removed; role-based messages removed.</div>
+
 <form id="form1" runat="server">
      <asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server" ScriptMode="Release"/>
          <div>

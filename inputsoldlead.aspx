@@ -17,11 +17,11 @@ z-index: 10000;
 </head>
 <body>
     <h3>Sales Lead Database</h3>
-    <br />
+
     <h3>Input Sold Lead</h3>
+
     <h4>Search for Client by Last Name Phone Number</h4>
-    <!-- LoginView removed: authentication disabled -->
-        <div class="auth-removed">Authentication removed; role-based messages removed.</div>
+
     <br />
 <form id="form1" runat="server">
 <div>
@@ -68,7 +68,7 @@ z-index: 10000;
                     Columns="1"
                     DateFormat="MM/dd/yyyy"
                     DatePickerMode="true"
-                    TextBoxId="SoldDate" DatePickerImagePath="../images/icon2.gif" DateMin="01/01/2011">
+                    TextBoxId="SoldDate" DatePickerImagePath="icon2.gif" DateMin="01/01/2011">
                 </obout:Calendar> 
             </EditItemTemplate>
             <ItemTemplate>

@@ -30,11 +30,9 @@ z-index: 10000;
 </head>
 <body>
     <h2>Funeral Home Database</h2>
-    <p>
+
     <h3>Funeral Home edit screen no filters</h3>
-    <!-- LoginView removed: authentication disabled -->
-        <div class="auth-removed">Authentication removed; role-based messages removed.</div>
-    </p>
+
 <form id="form1" runat="server">
 <asp:ToolkitScriptManager ID="ScriptManager1" runat="server">
 </asp:ToolkitScriptManager>

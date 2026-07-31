@@ -1,4 +1,4 @@
-﻿<%@ Page Title="PLMS - Customer lookup" Language="C#" AutoEventWireup="true" CodeFile="Customer.aspx.cs" Inherits="tvp_Customer" %>
+<%@ Page Title="PLMS - Customer lookup" Language="C#" AutoEventWireup="true" CodeFile="Customer.aspx.cs" Inherits="tvp_Customer" %>
 
 <%@ Register Assembly="obout_Interface" Namespace="Obout.Interface" TagPrefix="obout" %>
 <%@ Register Assembly="obout_Calendar2_Net" Namespace="OboutInc.Calendar2" TagPrefix="obout" %>
@@ -58,12 +58,7 @@
     <h2>Sales Lead Database</h2>
 
     <h3>Customer edit screen no filters</h3>
-    <!-- LoginView removed: authentication disabled -->
-        <div class="auth-removed">Authentication removed; role-based messages removed.</div>
 
-    <div>
-        <br />
-    </div>
 <form id="form1" runat="server">
 <asp:ToolkitScriptManager ID="ScriptManager1" runat="server" ScriptMode="Release"/>
 <asp:GridView ID="GridView1" runat="server" AllowPaging="True" 
@@ -259,13 +254,13 @@
      Appt Date &amp; Time:
      </td>
      <td>
-         <asp:TextBox runat="server" ID="txtDate" ToolTip="Using the popup calendar select a date and time for the appointment"/>
-         <obout:Calendar ID="Calendar1" runat="server"
-             ShowTimeSelector="true"
-             DateFormat="MM/dd/yyyy hh:mm"
-             DatePickerMode="true"
-             TextBoxId="txtDate" ShowSecondSelector="False" TimeSelectorType="HtmlList" DatePickerImagePath="../images/icon2.gif" DateMin="01/01/2011" >
-         </obout:Calendar>
+        <asp:TextBox runat="server" ID="txtDate" ToolTip="Using the popup calendar select a date and time for the appointment"/>
+        <obout:Calendar ID="Calendar1" runat="server"
+            ShowTimeSelector="true"
+            DateFormat="MM/dd/yyyy hh:mm"
+            DatePickerMode="true"
+            TextBoxId="txtDate" ShowSecondSelector="False" TimeSelectorType="HtmlList" DateMin="01/01/2011" DatePickerImagePath="~/images/icon2.gif">
+        </obout:Calendar>
      </td>
 </tr>
 <tr>

@@ -1,381 +1,18 @@
-﻿<%@ Page Title="PLMS - Customer lookup" Language="C#" AutoEventWireup="true" CodeFile="cluLastResort.aspx.cs" Inherits="_cluLastResort" %>
-<%@ Register Assembly="obout_Interface" Namespace="Obout.Interface" TagPrefix="obout" %>
-<%@ Register Assembly="obout_Calendar2_Net" Namespace="OboutInc.Calendar2" TagPrefix="obout" %>
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head id="Head1" runat="server">
-<title>Search for Last Resort by Agent</title>
-<style type="text/css">
-    .modalBackground
-    {
-        background-color: Gray;
-        z-index: 10000;
-    }
-    .ob_iCboIC, .ob_iDdlIC
-    {
-         z-index: 100002 !important;
-    }
-    .ob_iDdlICBC li
-    {
-    float: left;
-    width: 125px;
-    }
-</style>
-<script type="text/javascript">
-        function Print() {
-            var printWin = window.open('', '', 'left=0,top=0,width=1000,height=800,status=0');
-            printWin.document.write(document.getElementById("<%=dvContent.ClientID %>").outerHTML);
-            printWin.document.close();
-            printWin.focus();
-            printWin.print();
-            printWin.close();
-        }
-        window.onerror = function (msg, url, num) {
-            if (msg) {
-                var isAddHandlerException = msg.indexOf('Handler was not added through the Sys.UI.DomEvent.addHandler method.') !== -1
-                                            || msg.indexOf('b._events is undefined') !== -1;
-                return isAddHandlerException; /* if it is an add handler exception then return true because we are not interested in it. */
-            }
-        }
-        window.onload = function () {
-            Obout.Interface.OboutCore.getLeft = function (element) {
-                var position = $common.getLocation(element);
-                return position.x;
-            }
-
-            Obout.Interface.OboutCore.getTop = function (element) {
-                var position = $common.getLocation(element);
-                return position.y;
-            }
-        }
-    </script>
-</head>
-<body>
-    <h2>Sales Lead Database</h2>
-    <h3>Last Resort by Agent</h3>
-    /* LoginView removed: authentication disabled in markup */
-<form id="form1" runat="server">
-<div>
-     <asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server" ScriptMode="Release"/>
-         <div>
-            <div style="width: 275px; height: 66px">
-            <asp:Label ID="Label1" runat="server" Width="100px" />
-            <br />
-            <br />
-            <asp:DropDownList ID="DropDownList1" runat="server" ToolTip="Select the agent for this view">
-                <asp:ListItem>Select One</asp:ListItem>
-                <asp:ListItem>VPP Lead</asp:ListItem>
-                <asp:ListItem>VPW Web Lead</asp:ListItem>
-                <asp:ListItem>VPP Sharon Stangler</asp:ListItem>
-                <asp:ListItem>VPP Richard Stangler</asp:ListItem>
-                <asp:ListItem>Asher Lead</asp:ListItem>
-                <asp:ListItem>Asher Sharon Stangler</asp:ListItem>
-                <asp:ListItem>Asher Richard Stangler</asp:ListItem>
-                <asp:ListItem>GC Lead</asp:ListItem>
-                <asp:ListItem>GC Sharon Stangler</asp:ListItem>
-                <asp:ListItem>GC Richard Stangler</asp:ListItem>
-                <asp:ListItem>Stangler Lead</asp:ListItem>
-                <asp:ListItem>Sharon Stangler</asp:ListItem>
-                <asp:ListItem>Richard Stangler</asp:ListItem>
-                <asp:ListItem>Mary Jo Hudson</asp:ListItem>
-                <asp:ListItem>Amy Wallace</asp:ListItem>
-                <asp:ListItem>CTS</asp:ListItem>
-                <asp:ListItem>Web Lead</asp:ListItem>
-            </asp:DropDownList>
-            <br />
-            <br />
-            <asp:Button ID="Button1" runat="server" Text="Search" />
-            </div>
-         </div>
-         <br />
-</div>
-<asp:GridView ID="GridView1" runat="server" AllowPaging="True" 
-    AllowSorting="True" AutoGenerateColumns="False" DataKeyNames="ID" 
-    DataSourceID="SqlDataSource1" OnRowCreated="OnRowCreated">
-    <RowStyle BackColor="#EFF3FB" />
-    <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
-    <AlternatingRowStyle BackColor="White" />
-    <Columns>
-        <asp:TemplateField>
-            <ItemTemplate>
-                <asp:ImageButton ID="ImageButton1" runat="server" CausesValidation="False"
-                 CommandName="Edit" ImageUrl="~/Edit.jpg" Text="Edit" Width="25" Height="25" OnClick="ImageButton1_Click" Visible="true" />
-            </ItemTemplate>
-        </asp:TemplateField>
-        <asp:TemplateField>
-            <ItemTemplate>
-                <asp:ImageButton ID="ImageButton2" runat="server" CausesValidation="False"
-                 CommandName="Delete" ImageUrl="~/delete.png" Text="Delete" Width="25" Height="25" OnClick="ImageButton2_Click" Enabled="true" />
-            </ItemTemplate>
-        </asp:TemplateField>
-        <asp:BoundField DataField="ID" HeaderText="ID" ReadOnly="True" SortExpression="ID" Visible="False" />
-        <asp:BoundField DataField="Agent" HeaderText="Agent" SortExpression="Agent" NullDisplayText='None' />
-        <asp:BoundField DataField="Status" HeaderText="Status" SortExpression="Status" NullDisplayText='None' />
-        <asp:BoundField DataField="Created" DataFormatString="{0:d}" HeaderText="Date Created" SortExpression="Created" NullDisplayText=' ' />
-        <asp:BoundField DataField="LastName" HeaderText="LastName" SortExpression="LastName" NullDisplayText=' ' />
-        <asp:BoundField DataField="FirstName" HeaderText="FirstName" SortExpression="FirstName" NullDisplayText=' ' />
-        <asp:BoundField DataField="Address" HeaderText="Address" SortExpression="Address" NullDisplayText=' ' />
-        <asp:BoundField DataField="City" HeaderText="City" SortExpression="City" NullDisplayText=' ' />
-        <asp:BoundField DataField="State" HeaderText="State" SortExpression="State" NullDisplayText=' ' />
-        <asp:BoundField DataField="ZIP" HeaderText="ZIP" SortExpression="ZIP" NullDisplayText=' ' />
-        <asp:BoundField DataField="HomePhone" HeaderText="HomePhone" SortExpression="HomePhone" NullDisplayText=' ' />
-        <asp:BoundField DataField="MobilePhone" HeaderText="Mobile Phone" SortExpression="MobilePhone" NullDisplayText=' ' />
-        <asp:BoundField DataField="EmailAddress" HeaderText="EMailAddress" SortExpression="EMailAddress" NullDisplayText=' ' />
-        <asp:BoundField DataField="Branch" HeaderText="Branch" SortExpression="Branch" NullDisplayText='Unknown' />
-        <asp:BoundField DataField="HDischarge" HeaderText="HDischarge" SortExpression="HDischarge" NullDisplayText='Unknown' />
-        <asp:BoundField DataField="Ages" HeaderText="Ages" SortExpression="Ages" NullDisplayText=' ' />
-        <asp:BoundField DataField="Notes" HeaderText="Notes" SortExpression="Notes" NullDisplayText=' ' />
-        <asp:BoundField DataField="AppointmentSet" DataFormatString="{0:g}" HeaderText="AppointmentSet" SortExpression="AppointmentSet" NullDisplayText=' ' />
-        <asp:BoundField DataField="ApptSetter" HeaderText="Appt Setter" SortExpression="ApptSetter" NullDisplayText='None' />
-        <asp:BoundField DataField="AppointmentSet" DataFormatString="{0:g}" HeaderText="CTS Only" ReadOnly="True" Visible="True" NullDisplayText=' ' />
-    </Columns>
-</asp:GridView>
-<asp:Label ID="lblresult" runat="server"/> 
-<asp:Button ID="btnShowPopup" runat="server" style="display:none" />
-<asp:ModalPopupExtender ID="ModalPopupExtender1" runat="server" TargetControlID="btnShowPopup" PopupControlID="pnlpopup" BackgroundCssClass="modalBackground" />
-<asp:Label runat="server" ID="LDate" Visible="False"/>
-<asp:Label runat="server" ID="CDate" Visible="False"/>
-<asp:Panel ID="pnlpopup" runat="server" BackColor="White" Width="700px" style="display:none">
-<div id = "dvContent" runat = "server">
-<table width="100%" style="border:Solid 3px #D55500; width:100%; height:100%" cellpadding="0" cellspacing="0">
-<tr style="background-color:#D55500">
-<td colspan="2" style=" height:10%; color:White; font-weight:bold; font-size:larger" align="center">Customer Details</td>
-</tr>
-<tr>
-    <td align="right" style=" width:45%">
-    Record Id:
-    </td>
-    <td>
-        <asp:Label ID="lblID" runat="server"></asp:Label>
-    </td>
-</tr>
-<tr>
-    <td align="right">
-    First Name:
-    </td>
-    <td><asp:TextBox ID="txtfname" runat="server" ToolTip="Enter first name"/></td>
-</tr>
-<tr>
-    <td align="right">
-    Last Name:
-    </td>
-    <td>
-        <asp:TextBox ID="txtlname" runat="server" ToolTip="Enter last name"/>
-    </td>
-</tr>
-<tr>
-     <td align="right">
-     Address:
-     </td>
-     <td>
-         <asp:TextBox ID="txtadd" runat="server" ToolTip="Enter an address"/>
-     </td>
-</tr>
-<tr>
-     <td align="right">
-     City:
-     </td>
-     <td>
-         <asp:TextBox ID="txtcity" runat="server" ToolTip="Enter a city name"/>
-     </td>
-</tr>
-<tr>
-     <td align="right">
-     State:
-     </td>
-     <td>
-         <asp:TextBox ID="txtstate" runat="server" ToolTip=" Enter a two letter state"/>
-     </td>
-</tr>
-<tr>
-     <td align="right">
-     Zip:
-     </td>
-     <td>
-          <asp:TextBox ID="txtzip" runat="server" ToolTip="Enter a valid zip code"/>
-     </td>
-</tr>
-<tr>
-     <td align="right">
-     Home Phone:
-     </td>
-     <td>
-          <asp:TextBox ID="txthphone" runat="server" CausesValidation="True" ToolTip="Enter a vaild 10 digit phone # with dashes"/>
-            <asp:RegularExpressionValidator
-                ID="RegularExpressionValidator1" runat="server" 
-                ErrorMessage="Must be a valid Phone # ie. 555-555-1212 with dashes" 
-                ControlToValidate="txthphone" 
-                ValidationExpression="((\(\d{3}\) ?)|(\d{3}-))?\d{3}-\d{4}" Display="Dynamic"></asp:RegularExpressionValidator>
-     </td>
-</tr>
-<tr>
-     <td align="right">
-     Mobile Phone:
-     </td>
-     <td>
-          <asp:TextBox ID="txtmphone" runat="server" CausesValidation="True" ToolTip="Enter a valid 10 digit phone # with dashes" />
-            <asp:RegularExpressionValidator
-                ID="RegularExpressionValidator3" runat="server" 
-                ErrorMessage="Must be a valid Phone # ie. 555-555-1212 with dashes" 
-                ControlToValidate="txtmphone" 
-                ValidationExpression="((\(\d{3}\) ?)|(\d{3}-))?\d{3}-\d{4}" Display="Dynamic"></asp:RegularExpressionValidator>
-     </td>
-</tr>
-<tr>
-     <td align="right">
-     Email Address:
-     </td>
-     <td>
-          <asp:TextBox ID="txtemail" runat="server" CausesValidation="True" ToolTip="Enter a valid email address"/>
-            <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server" 
-                ErrorMessage="A valid email address must be entered ie. example@theveteranprogram.com" 
-                ControlToValidate="txtemail" 
-                ValidationExpression="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" Display="Dynamic"></asp:RegularExpressionValidator>
-     </td>
-</tr>
-<tr>
-     <td align="right">
-     Branch:
-     </td>
-     <td>
-          <obout:OboutDropDownList ID="txtbranch" runat="server" ToolTip="Select a branch of service if known" >
-                <asp:ListItem>Air Force</asp:ListItem>
-                <asp:ListItem>Army</asp:ListItem>
-                <asp:ListItem>Coast Guard</asp:ListItem>
-                <asp:ListItem>Marines</asp:ListItem>
-                <asp:ListItem>Navy</asp:ListItem>
-                <asp:ListItem>Unknown</asp:ListItem>
-           </obout:OboutDropDownList>
-     </td>
-</tr>
-<tr>
-     <td align="right">
-     Honorable Discharge:
-     </td>
-     <td>
-          <obout:OboutDropDownList ID="txthdischarge" runat="server" ToolTip="Select discharge status if known" >
-                <asp:ListItem>Yes</asp:ListItem>
-                <asp:ListItem>No</asp:ListItem>
-                <asp:ListItem>Unknown</asp:ListItem>
-          </obout:OboutDropDownList>
-     </td>
-</tr>
-<tr>
-     <td align="right">
-     Ages:
-     </td>
-     <td>
-          <asp:TextBox ID="txtages" runat="server" ToolTip="Enter ages if known"/>
-     </td>
-</tr>
-<tr>
-     <td align="right">
-     Notes:
-     </td>
-     <td>
-          <asp:TextBox ID="txtnotes" runat="server" ToolTip="Enter notes here"/>
-     </td>
-</tr>
-<tr>
-     <td align="right">
-     Appt Date &amp; Time:
-     </td>
-     <td>
-         <asp:TextBox runat="server" ID="txtDate" ToolTip="Using the popup calendar select a date and time for the appointment"/>
-         <obout:Calendar ID="Calendar1" runat="server"
-             ShowTimeSelector="true"
-             DateFormat="MM/dd/yyyy hh:mm"
-             DatePickerMode="true"
-             TextBoxId="txtDate" ShowSecondSelector="False" TimeSelectorType="DropDownList" DatePickerImagePath="../images/icon2.gif" >
-         </obout:Calendar>
-     </td>
-</tr>
-<tr>
-     <td align="right">
-     Agent:
-     </td>
-     <td>
-          <obout:OboutDropDownList ID="txtagent" runat="server" ToolTip="Select the agent for this record" >
-                <asp:ListItem>Select One</asp:ListItem>
-                <asp:ListItem>GC Lead</asp:ListItem>
-                <asp:ListItem>GC Sharon Stangler</asp:ListItem>
-                <asp:ListItem>GC Richard Stangler</asp:ListItem>
-                <asp:ListItem>Asher Lead</asp:ListItem>
-                <asp:ListItem>Asher Sharon Stangler</asp:ListItem>
-                <asp:ListItem>Asher Richard Stangler</asp:ListItem>
-                <asp:ListItem>Stangler Lead</asp:ListItem>
-                <asp:ListItem>Sharon Stangler</asp:ListItem>
-                <asp:ListItem>Richard Stangler</asp:ListItem>
-                <asp:ListItem>Mary Jo Hudson</asp:ListItem>
-                <asp:ListItem>Amy Wallace</asp:ListItem>
-                <asp:ListItem>CTS</asp:ListItem>
-                <asp:ListItem>Web Lead</asp:ListItem>
-            </obout:OboutDropDownList>
-     </td>
-</tr>
-<tr>
-     <td align="right">
-     Appointment Setter:
-     </td>
-     <td>
-         <obout:OboutDropDownList ID="txtapptset" runat="server" ToolTip="Select an appointment setter if applicable" >     
-                <asp:ListItem>None</asp:ListItem>
-                <asp:ListItem>Nancy Crocker</asp:ListItem>
-                <asp:ListItem>Outside Agent</asp:ListItem>
-         </obout:OboutDropDownList>
-     </td>
-</tr>
-<tr>
-     <td align="right">
-     Lead Status:
-     </td>
-     <td>
-                <obout:OboutDropDownList runat="server" ID="txtstatus" MenuWidth="500" 
-		            DataSourceID="sds1" DataTextField="Status" DataValueField="Status"
-		            AppendDataBoundItems="true" FolderStyle="styles/grand_gray/OboutDropDownList"
-		            >
-		            <asp:ListItem>Select a Status ...</asp:ListItem>
-		        </obout:OboutDropDownList>
-     </td>
-</tr>
-<tr>
-    <td align="right">
-    <asp:Button ID="btnUpdate" CommandName="Update" runat="server" Text="Update" OnClick="btnUpdate_Click"/>
-    <asp:Button ID="btnCancel" runat="server" Text="Cancel" />                 
-    <input type = "button" value  = "Print" onclick = "Print()" />
-    </td>
-</tr>
-</table>
-<asp:HyperLink runat="server" ID="lnkPartner" Text="Return to Partner Pages" NavigateUrl="~/default.aspx"></asp:HyperLink>
-</div>
-</asp:Panel>
-<asp:SqlDataSource ID="sds1" runat="server" SelectCommand="SELECT * FROM [StatusDDL] ORDER BY [Status] ASC" ConnectionString="<%$ ConnectionStrings:salespipeline %>" />
-<asp:SqlDataSource ID="SqlDataSource1" runat="server" 
-    ConnectionString="<%$ ConnectionStrings:salespipeline %>" 
-    OldValuesParameterFormatString="original_{0}"  
-    SelectCommand="SELECT * FROM [Customers] WHERE ([Agent] = @Agent) AND [Status] = 'Last Resort' ORDER BY [Created] DESC">
-    <SelectParameters>
-        <asp:ControlParameter ControlID="DropDownList1" Name="Agent" PropertyName="Text" 
-            Type="String" />
-    </SelectParameters>
-</asp:SqlDataSource>
-</form>
-</body>
-</html>
-```
-```csharp
+﻿using AjaxControlToolkit;
 using System;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-public partial class _cluLastResort : Page
+public partial class _cluAgentWeb : Page
 {
     private readonly SqlConnection _connection = new SqlConnection(ConfigurationManager.ConnectionStrings["salespipeline"].ToString());
 
@@ -450,7 +87,7 @@ public partial class _cluLastResort : Page
     protected void btnUpdate_Click(object sender, EventArgs e)
     {
         UpdateCustomerRecord();
-        SendAppointmentEmail();
+        //SendEmail();
         ClearForm();
         GridView1.DataBind();
     }
@@ -498,7 +135,7 @@ public partial class _cluLastResort : Page
             cmd.Parameters.AddWithValue("@CDate", sqlDateNull);
             cmd.Parameters.AddWithValue("@LDate", sqlDateNull);
         }
-        else if (txtstatus.Text == "Left Message")
+        else if (txtstatus.Text == "Left Message" || txtstatus.Text == "Texted Lead")
         {
             cmd.Parameters.AddWithValue("@LDate", DateTime.Today);
             cmd.Parameters.AddWithValue("@CDate", sqlDateNull);
@@ -510,38 +147,75 @@ public partial class _cluLastResort : Page
         }
     }
 
-    private void SendAppointmentEmail()
+    private void SendEmail(string agent, DateTime appointmentDate)
     {
-        if (string.IsNullOrWhiteSpace(txtDate.Text))
-            return;
+        string toagent = "";
+        string recipientEmail;
+        if (agent == "VPP Sharon Stangler" || agent == "Asher Sharon Stangler" || agent == "Sharon Stangler")
+            recipientEmail = "rsstangler1@gmail.com";
+        else if (agent == "VPP Richard Stangler" || agent == "Asher Richard Stangler" || agent == "Richard Stangler")
+            recipientEmail = "rjsstangler@gmail.com";
+        else if (agent == "Mary Jo Hudson")
+            recipientEmail = "maryjoveteransprogram@gmail.com";
+        else
+            recipientEmail = "cj.haarer@gmail.com";
 
-        var msg = new MailMessage
+        MailMessage msg = new MailMessage
         {
-            From = new MailAddress("info@ashersolutions.com", "Sales Lead Appointment"),
-            Subject = $"{txtfname.Text} {txtlname.Text} {txtadd.Text} {txtcity.Text} {txtstate.Text} {txtzip.Text} {txthphone.Text} {txtmphone.Text} {txtbranch.Text} {txtages.Text}",
-            Body = $"You have an Appointment with {txtfname.Text} {txtlname.Text} {txthphone.Text} {txtmphone.Text} {txtbranch.Text} {txthdischarge.Text} {txtages.Text}"
+            From = new MailAddress("info@ashersolutions.com", "Asher Solutions")
         };
 
-        var toAgent = GetAgentEmail(txtagent.Text);
-        msg.To.Add(new MailAddress($"{toAgent}@gmail.com", txtagent.Text));
+        if (agent == "VPP Sharon Stangler")
+            toagent = "rsstangler1";
+        else if (agent == "VPP Richard Stangler")
+            toagent = "rjsstangler";
+        else if (agent == "Asher Sharon Stangler")
+            toagent = "rsstangler1";
+        else if (agent == "Asher Richard Stangler")
+            toagent = "rjsstangler";
+        else if (agent == "Sharon Stangler")
+            toagent = "rsstangler1";
+        else if (agent == "Richard Stangler")
+            toagent = "rjsstangler";
+        else if (agent == "Mary Jo Hudson")
+            toagent = "maryjoveteransprogram";
+        else
+            toagent = "cj.haarer";
 
-        var dt = Convert.ToDateTime(txtDate.Text);
-        var str = new StringBuilder();
+        msg.To.Add(new MailAddress(toagent + "@gmail.com", txtagent.Text));
+        //msg.CC.Add(new MailAddress("zzzzz@xyz.com", "DEF"));// it is optional, only if required
+        DateTime dt;
+        if (!DateTime.TryParse(txtDate.Text, out dt))
+        {
+            lblresult.Text = "Invalid date format.";
+            lblresult.ForeColor = System.Drawing.Color.Red;
+            return;
+        }
+        msg.Body = "You have an Appointment with " + txtfname.Text.ToString() + " " + txtlname.Text.ToString() + " " + txthphone.Text.ToString() + " " + txtmphone.Text.ToString() + " " + txtbranch.Text.ToString() + " " + txthdischarge.Text.ToString() + " " + txtages.Text.ToString();
+
+        //Parse the txtdate value
+        //DateTime dt = Convert.ToDateTime(txtDate.Text);
+
+        // Now Contruct the ICS file using string builder
+        StringBuilder str = new StringBuilder();
         str.AppendLine("BEGIN:VCALENDAR");
         str.AppendLine("PRODID:-//Schedule a Meeting");
         str.AppendLine("VERSION:2.0");
         str.AppendLine("METHOD:REQUEST");
         str.AppendLine("BEGIN:VEVENT");
-        str.AppendLine($"DTSTART:{dt.ToUniversalTime():yyyyMMddTHHmmssZ}");
-        str.AppendLine($"DTSTAMP:{DateTime.Now:yyyyMMddTHHmmssZ}");
-        str.AppendLine($"DTEND:{dt.AddMinutes(180).ToUniversalTime():yyyyMMddTHHmmssZ}");
-        str.AppendLine($"LOCATION: {txtadd.Text} {txtcity.Text} {txtstate.Text} {txtzip.Text}");
-        str.AppendLine($"UID:{Guid.NewGuid()}");
-        str.AppendLine($"DESCRIPTION:{msg.Body}");
-        str.AppendLine($"X-ALT-DESC;FMTTYPE=text/html:{msg.Body}");
-        str.AppendLine($"SUMMARY:{msg.Subject}");
-        str.AppendLine($"ORGANIZER:MAILTO:{msg.From.Address}");
-        str.AppendLine($"ATTENDEE;ROLE=OWNER;CN=\"{msg.To[0].DisplayName}\";RSVP=TRUE:mailto:{msg.To[0].Address}");
+        str.AppendLine(string.Format("DTSTART:{0:yyyyMMddTHHmmssZ}", dt.ToUniversalTime().ToString("yyyyMMdd\\THHmmss\\Z")));
+        str.AppendLine(string.Format("DTSTAMP:{0:yyyyMMddTHHmmssZ}", DateTime.Now));
+        str.AppendLine(string.Format("DTEND:{0:yyyyMMddTHHmmssZ}", dt.AddMinutes(+180).ToUniversalTime().ToString("yyyyMMdd\\THHmmss\\Z")));
+
+        str.AppendLine("LOCATION: " + txtadd.Text.ToString() + " " + txtcity.Text.ToString() + " " + txtstate.Text.ToString() + " " + txtzip.Text.ToString());
+        str.AppendLine(string.Format("UID:{0}", Guid.NewGuid()));
+        str.AppendLine(string.Format("DESCRIPTION:{0}", msg.Body));
+        str.AppendLine(string.Format("X-ALT-DESC;FMTTYPE=text/html:{0}", msg.Body));
+        str.AppendLine(string.Format("SUMMARY:{0}", msg.Subject));
+        str.AppendLine(string.Format("ORGANIZER:MAILTO:{0}", msg.From.Address));
+
+        str.AppendLine(string.Format("ATTENDEE;ROLE=OWNER;CN=\"{0}\";RSVP=TRUE:mailto:{1}", msg.To[0].DisplayName, msg.To[0].Address));
+
         str.AppendLine("BEGIN:VALARM");
         str.AppendLine("TRIGGER:-PT30M");
         str.AppendLine("ACTION:DISPLAY");
@@ -550,44 +224,69 @@ public partial class _cluLastResort : Page
         str.AppendLine("END:VEVENT");
         str.AppendLine("END:VCALENDAR");
 
-        var smtpClient = new SmtpClient("smtp.ashersolutionsinc.com")
+        var bytes = Encoding.UTF8.GetBytes(str.ToString());
+        var stream = new MemoryStream(bytes);
+        var attachment = new Attachment(stream, "appointment.ics", "text/calendar");
+        msg.Attachments.Add(attachment);
+
+        System.Net.ServicePointManager.ServerCertificateValidationCallback =
+        delegate (object s, System.Security.Cryptography.X509Certificates.X509Certificate certificate,
+                System.Security.Cryptography.X509Certificates.X509Chain chain,
+                System.Net.Security.SslPolicyErrors sslPolicyErrors)
         {
-            DeliveryMethod = SmtpDeliveryMethod.Network,
-            UseDefaultCredentials = false,
-            Credentials = new NetworkCredential("info@ashersolutionsinc.com", "L3tm31npl3@s3!#$"),
-            Port = 587,
-            EnableSsl = true
+            return true; // ❌ Accepts all certs – insecure!
         };
+        //System.Net.ServicePointManager.ServerCertificateValidationCallback = null; // ✅ Accepts only valid certs             
+        System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
-        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
-
-        var contentType = new System.Net.Mime.ContentType("text/calendar")
+        using (SmtpClient smtpClient = new SmtpClient("smtp.ashersolutions.com", 587))
         {
-            Parameters = { { "method", "REQUEST" }, { "name", "Meeting.ics" } }
-        };
+            smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+            smtpClient.UseDefaultCredentials = false;
+            smtpClient.Credentials = new NetworkCredential("info@ashersolutions.com", "Fr3343v3r&^%");
+            smtpClient.EnableSsl = true;
 
-        var alternateView = AlternateView.CreateAlternateViewFromString(str.ToString(), contentType);
-        msg.AlternateViews.Add(alternateView);
-        smtpClient.Send(msg);
+            try
+            {
+                smtpClient.Send(msg);
+                lblresult.Text = "Email sent successfully.";
+                lblresult.ForeColor = System.Drawing.Color.Green;
+            }
+            catch (Exception ex)
+            {
+                lblresult.Text = "Email error: " + ex.Message;
+                lblresult.ForeColor = System.Drawing.Color.Red;
+            }
+        }
     }
 
     private string GetAgentEmail(string agent)
     {
-        return agent switch
+        switch (agent)
         {
-            "GC Sharon Stangler" => "rsstangler1",
-            "GC Richard Stangler" => "rjsstangler",
-            "Asher Sharon Stangler" => "rsstangler1",
-            "Asher Richard Stangler" => "rjsstangler",
-            "Sharon Stangler" => "rsstangler1",
-            "Richard Stangler" => "rjsstangler",
-            "Mary Jo Hudson" => "maryjoveteransprogram",
-            "Amy Wallace" => "awallacetvp",
-            "Serenity" => "donna.haarer",
-            _ => "cj.haarer"
-        };
-    }
+            case "GC Sharon Stangler":
+            case "Asher Sharon Stangler":
+            case "Sharon Stangler":
+                return "rsstangler1";
 
+            case "GC Richard Stangler":
+            case "Asher Richard Stangler":
+            case "Richard Stangler":
+                return "rjsstangler";
+
+            case "Mary Jo Hudson":
+                return "maryjoveteransprogram";
+
+            case "Amy Wallace":
+                return "awallacetvp";
+
+            case "Serenity":
+                return "donna.haarer";
+
+            default:
+                return "cj.haarer";
+        }
+    }
     private void ClearForm()
     {
         foreach (IValidator ctrl in Validators)
@@ -603,15 +302,50 @@ public partial class _cluLastResort : Page
         txtzip.Text = string.Empty;
         txtmphone.Text = string.Empty;
         txtemail.Text = string.Empty;
-        txtbranch.Text = string.Empty;
-        txthdischarge.Text = string.Empty;
+        if (txtbranch.Items.FindByValue("") != null)
+        {
+            txtbranch.SelectedValue = "";
+        }
+        else
+        {
+            txtbranch.ClearSelection(); // Or: txtbranch.SelectedIndex = -1;
+        }
+        if (txthdischarge.Items.FindByValue("") != null)
+        {
+            txthdischarge.SelectedValue = "";
+        }
+        else
+        {
+            txthdischarge.ClearSelection(); // Or: txthdischarge.SelectedIndex = -1;
+        }
         txtages.Text = string.Empty;
         txtnotes.Text = string.Empty;
         txtDate.Text = string.Empty;
         Calendar1.SelectedDate = DateTime.MinValue;
-        txtagent.Text = string.Empty;
-        txtapptset.Text = string.Empty;
-        txtstatus.Text = string.Empty;
+        if (txtagent.Items.FindByValue("") != null)
+        {
+            txtagent.SelectedValue = "";
+        }
+        else
+        {
+            txtagent.ClearSelection(); // Or: txtagent.SelectedIndex = -1;
+        }
+        if (txtapptset.Items.FindByValue("") != null)
+        {
+            txtapptset.SelectedValue = "";
+        }
+        else
+        {
+            txtapptset.ClearSelection(); // Or: txtapptset.SelectedIndex = -1;
+        }
+        if (txtstatus.Items.FindByValue("") != null)
+        {
+            txtstatus.SelectedValue = "";
+        }
+        else
+        {
+            txtstatus.ClearSelection(); // Or: txtstatus.SelectedIndex = -1;
+        }
 
         ModalPopupExtender1.Hide();
     }

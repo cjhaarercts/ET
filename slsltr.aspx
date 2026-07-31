@@ -30,12 +30,9 @@ z-index: 10000;
 </head>
 <body>
     <h2>Sales Lead Database</h2>
-    <p>
-    <h3>Leads needing sold letters</h3>
-    <!-- LoginView removed: authentication disabled -->
-        <div class="auth-removed">Authentication removed; role-based messages removed.</div>
 
-    </p>
+    <h3>Leads needing sold letters</h3>
+
 <form id="form1" runat="server">
 <asp:ToolkitScriptManager ID="ScriptManager1" runat="server">
 </asp:ToolkitScriptManager>
@@ -59,11 +56,11 @@ z-index: 10000;
                 <asp:ListItem>CTS</asp:ListItem>
             </asp:DropDownList>
             <asp:TextBox runat="server" ID="txtDate" ToolTip="Using the popup calendar select a date and time for the appointment"/>
-                <obout:Calendar ID="Calendar1" runat="server"
-                DateFormat="yyyy-MM-dd"
-                DatePickerMode="true"
-                TextBoxId="txtDate" DatePickerImagePath="../images/icon2.gif" DateMin="01/01/2013" >
-                </obout:Calendar>
+            <obout:Calendar ID="Calendar1" runat="server"
+            DateFormat="yyyy-MM-dd"
+            DatePickerMode="true"
+            TextBoxId="txtDate" DateMin="01/01/2013" DatePickerImagePath="~/images/icon2.gif">
+            </obout:Calendar>
             <br />
             <br />
             <asp:Button ID="Button1" runat="server" Text="Search" />

@@ -52,7 +52,7 @@
     <h2>Sales Lead Database</h2>
     <h3>Active Website Leads</h3>
     <!-- LoginView removed: authentication disabled -->
-    <div class="auth-removed">Authentication removed; role-based messages removed.</div>
+    <div class="auth-removed"></div>
     <form id="form1" runat="server">
         <div>
             <asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server" ScriptMode="Release" />

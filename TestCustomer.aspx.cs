@@ -58,7 +58,45 @@ public partial class tvp_Customer : System.Web.UI.Page
         GridViewRow gvrow = (GridViewRow)ImageButton1.NamingContainer;
         lblID.Text = GridView1.DataKeys[gvrow.RowIndex].Value.ToString();
 
-        txtagent.Text = gvrow.Cells[3].Text; 
+        // Safely apply agent value even if it is not present in the dropdown list
+        string agentValue = gvrow.Cells[3].Text == null ? string.Empty : gvrow.Cells[3].Text.Trim();
+        try
+        {
+            if (txtagent != null)
+            {
+                ListItem foundAgent = null;
+                if (txtagent.Items != null)
+                {
+                    foundAgent = txtagent.Items.FindByText(agentValue) ?? txtagent.Items.FindByValue(agentValue);
+                }
+
+                if (foundAgent != null)
+                {
+                    txtagent.ClearSelection();
+                    foundAgent.Selected = true;
+                }
+                else if (txtagent.Items != null)
+                {
+                    // insert a temporary list item so SelectedValue is valid and UI shows the value
+                    txtagent.Items.Insert(0, new ListItem(agentValue, agentValue));
+                    txtagent.ClearSelection();
+                    txtagent.Items[0].Selected = true;
+                }
+                else
+                {
+                    txtagent.Text = agentValue;
+                }
+            }
+        }
+        catch
+        {
+            // final fallback: set Text and continue — avoid throwing to user
+            if (txtagent != null)
+            {
+                txtagent.Text = agentValue;
+            }
+        }
+
         txtstatus.Text = gvrow.Cells[4].Text;
         txtlname.Text = gvrow.Cells[6].Text;
         txtfname.Text = gvrow.Cells[7].Text;
